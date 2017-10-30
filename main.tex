@@ -4,6 +4,7 @@
 \usepackage{url}
 \usepackage{navigator}
 \embeddedfile{main}{./main.tex}
+\usepackage{float}
 
 \title{\bf{Aplikacja mobilna dla biegacza - GitFitScrub}}
 \author{{\em Michał Ptak, Katarzyna Poręba, Jan Michalik}}
@@ -43,12 +44,12 @@ Prowadzący: dr hab. Marcin Mazur
 
 \subsection{Cel projektu (produkt)}
 
-Naszym celem jest zbudowanie aplikacji mobilnej na system operacyjny Android przy użyciu map Google, która pobiera informacje poruszającej się osoby z modułu GPS i zapisuje poczynania w bazie danych, a także gromadzi statystyki dotyczące długości trasy, prędkości czy spalanych kalorii.
+Naszym celem jest zbudowanie aplikacji mobilnej na system operacyjny Android przy użyciu map Google, która pobiera informacje poruszającej się osoby z modułu GPS i gromadzi statystyki dotyczące długości trasy, prędkości czy spalanych kalorii, a także zapisuje poczynania w bazie danych.
 
 \subsection{Potencjalny odbiorca produktu (klient)}
 
 % Określić potencjalnego klienta (wraz z uzasadnieniem).
-Klient biega na różnych odcinkach miasta. Oczekuje w pełni darmowej aplikacji bez reklam, która będzie śledzić trasę po której się porusza. Potrzebuje również statystyk swoich postępów.
+Klient jest biegaczem oczekującym w pełni darmowej aplikacji bez reklam, która będzie śledzić trasę, po której się porusza oraz wyświetlać aktualne statystyki. Aktualnie żadna dostępna na rynku aplikacja nie spełnia odbiorcy produktu.
 
 \subsection{Metodyka}
 
@@ -61,72 +62,70 @@ Projekt będzie realizowany przy użyciu (zaadaptowanej do istniejących warunk�
 Jako użytkownik, chcę mieć dostęp do mapy podczas treningu, aby widzieć jaką trasą się poruszam.
 
 \subsection{User story 2}
-Jako użytkownik, chcę zobaczyć statystki przebytych przeze mnie tras, aby wiedzieć jakie czynię postępy w treningach.
+Jako użytkownik, chcę mieć możliwość wciśnięcia przycisku "Start", aby rozpocząć pomiar.
 
 \subsection{User story 3}
-Jako użytkownik niezarejestrowany, chcę mieć możliwość rejestracji, aby móc się zalogować.
+Jako użytkownik, chcę mieć możliwość wciśnięcia przycisku "Stop", aby zakończyć pomiar.
 
 \subsection{User story 4}
-Jako użytkownik zarejestrowany, chcę mieć możliwość zalogowania się, aby móc korzystać z aplikacji.
+Jako użytkownik, chcę widzieć czas, który upłynął od rozpoczęcia pomiaru biegu, aby kontrolować jego upływ.
 
 \subsection{User story 5}
-Jako użytkownik zalogowany, chcę mieć możliwość wylogowania się, aby przestać korzystać z aplikacji.
-
-\subsection{User story 6}
-Jako użytkownik, chcę mieć możliwość wciśnięcia przycisku "Start", aby rozpocząć pomiary.
-
-\subsection{User story 7}
-Jako użytkownik, chcę widzieć czas, który upłynął od rozpoczęcia pomiaru biegu, aby kontrolować jego długość.
-
-\subsection{User story 8}
 Jako użytkownik, chcę widzieć przebyty dystans, aby kontrolować jego długość.
 
-\subsection{User story 9}
-Jako użytkownik, chcę mieć możliwość wciśnięcia przycisku "Stop", aby zakończyć trening.
+\subsection{User story 6}
+Jako użytkownik, chcę widzieć prędkość chwilową, z jaką się poruszam, aby zachować określone tempo.
 
-\subsection{User story 10}
+\subsection{User story 7}
 Jako użytkownik, chcę zobaczyć podsumowanie odbytego treningu, aby ocenić jego rezultat.
 %ocena treningu
 
-\subsection{User story 11}
-Jako użytkownik zalogowany, chcę aby statystyki z odbytych treningów zostały zapisane w historii, celem ich późniejszej analizy.
+\subsection{User story 8}
+Jako użytkownik, chcę mieć możliwość włączenia trybu nocnego, aby zmniejszyć zmęczenie wzroku po zmroku.
 
-\subsection{User story 12}
-Jako użytkownik zalogowany, chcę mieć możliwość usunięcia (całej lub części) historii treningów, aby rozpocząć nowy cykl treningowy.
+\subsection{User story 9 (opcjonalne)}
+Jako użytkownik niezarejestrowany, chcę mieć możliwość rejestracji, aby móc się zalogować.
 
-\subsection{User story 13}
-Jako użytkownik zalogowany, chcę mieć możliwość podjęcia wyzwania pokonania określonych odległości (np. z Ziemi do Księżyca), aby mieć motywację do kontynuowania treningu.
+\subsection{User story 10 (opcjonalne)}
+Jako użytkownik zarejestrowany, chcę mieć możliwość zalogowania się, aby móc korzystać ze wszystkich funkcji aplikacji.
 
-\subsection{User story 14}
-Jako użytkownik zalogowany, chcę widzieć w statystykach spalone kalorie, by móc dostosować swoją dietę.
+\subsection{User story 11 (opcjonalne)}
+Jako użytkownik zalogowany, chcę mieć możliwość wylogowania się, aby móc zalogować się na inne konto.
 
-\subsection{User story 15}
-Jako użytkownik zalogowany, chcę mieć możliwość ręcznego zatrzymania pomiaru czasu oraz dystansu, aby napotkane przeszkody (np. czerwone światło) nie fałszowały statystyk.
-
-\subsection{User story 16}
-Jako użytkownik zalogowany, chce mieć możliwość udostępnienia swoich osiągnięć na portalach społecznościowych, aby podzielić się rezultatami ze znajomymi.
-
-\subsection{User story 17}
-Jako użytkownik zalogowany, chcę mieć możliwość włączenia trybu nocnego, aby zmniejszyć zmęczenie wzroku po zmroku.
-
-\subsection{User story 18}
-Jako użytkownik, chcę mieć możliwość ustawienia powiadomień po określonym przez siebie odcinku trasy, by wiedzieć nie być zmuszonym do ciągłego sprawdzania aplikacji.
-
-\subsection{User story 19}
+\subsection{User story 12 (opcjonalne)}
 Jako użytkownik zalogowany, chcę mieć możliwość ustawienia swojego pseudonimu, aby wiedzieć czy jestem zalogowany na swoim koncie.
 
-\subsection{User story 20}
+\subsection{User story 13 (opcjonalne)}
+Jako użytkownik zalogowany, chcę aby statystyki z odbytych treningów zostały zapisane w historii, celem ich późniejszej analizy.
+
+\subsection{User story 14 (opcjonalne)}
+Jako użytkownik zalogowany, chcę widzieć w statystykach spalone kalorie, by móc dostosować swoją dietę.
+
+\subsection{User story 15 (opcjonalne)}
+Jako użytkownik zalogowany, chcę mieć możliwość usunięcia (całej lub części) historii treningów, aby rozpocząć nowy cykl treningowy.
+
+\subsection{User story 16 (opcjonalne)}
 Jako użytkownik zalogowany, chcę by aplikacja pamiętała ostatnio użyty login, aby nie wpisywać go ręcznie przy kolejnym logowaniu.
 
-%\subsection*{<<Tutaj dodawać kolejne historyjki>>}
+\subsection{User story 17 (opcjonalne)}
+Jako użytkownik zalogowany, chcę mieć możliwość ręcznego zatrzymania pomiaru czasu oraz dystansu, aby napotkane przeszkody (np. czerwone światło) nie fałszowały statystyk.
+
+\subsection{User story 18 (opcjonalne)}
+Jako użytkownik zalogowany, chcę mieć możliwość podjęcia wyzwania pokonania określonych odległości (np. z Ziemi do Księżyca), aby mieć motywację do kontynuowania treningu.
+
+\subsection{User story 19 (opcjonalne)}
+Jako użytkownik zalogowany, chce mieć możliwość udostępnienia swoich osiągnięć na portalach społecznościowych, aby podzielić się rezultatami ze znajomymi.
+
+\subsection{User story 20 (opcjonalne)}
+Jako użytkownik, chcę mieć możliwość ustawienia powiadomień po określonym przez siebie odcinku trasy, by nie być zmuszonym do ciągłego sprawdzania aplikacji.
 
 \section{Harmonogram}
 
 \subsection{Rejestr zadań (Product Backlog)}
 
 \begin{itemize}
-\item Data rozpoczęcia: 31.10.2017.
-\item  Data zakończenia: 16.01.2018.
+	\item Data rozpoczęcia: 24.10.2017.
+	\item Data zakończenia: 31.10.2017.
 \end{itemize}
 
 \subsection{Sprint 1}
@@ -193,33 +192,43 @@ Jako użytkownik zalogowany, chcę by aplikacja pamiętała ostatnio użyty logi
 
 \section{Product Backlog}
 
-\begin{center}
-	\begin{tabular}{ |l|l|l|l|l|l| }
-	\hline
-	Backlog & Tytuł zadania & Opis zadania & Priorytet & Definition of Done \\
-	\hline
-	Item 1 & ? & ? & ? & ? \\
-	\hline
-	Item 2 & ? & ? & ? & ? \\
-	\hline
-	Item 3 & ? & ? & ? & ? \\
-	\hline
-	\end{tabular}
-\end{center}
-
 \subsection{Backlog Item 1}
-\paragraph{Tytuł zadania.} <<Tytuł>>.
-\paragraph{Opis zadania.} <<Opis>>.
-\paragraph{Priorytet.} <<Priorytet>>.
-\paragraph{Definition of Done.} <<Określić (w języku zrozumiałym dla wszystkich członków zespołu), co oznacza ukończenie danego zadania>>.
+\paragraph{Tytuł zadania.} Przygotowanie zestawu narzędzi SDK.
+\paragraph{Opis zadania.} Dodanie do zestawu SDK: Google Services, nową dystrybucję Androida (wersja Oreo), debugowanie poprzez USB.
+\paragraph{Priorytet.} 10.
+\paragraph{Definition of Done.} Poprawne zainstalowanie wybranych narzędzi SDK na stacjach roboczych.
 
 \subsection{Backlog Item 2}
-\paragraph{Tytuł zadania.} <<Tytuł>>.
-\paragraph{Opis zadania.} <<Opis>>.
-\paragraph{Priorytet.} <<Priorytet>>.
-\paragraph{Definition of Done.} <<Określić (w języku zrozumiałym dla wszystkich członków zespołu), co oznacza ukończenie danego zadania>>.
+\paragraph{Tytuł zadania.} Stworzenie wstępnej wersji aplikacji.
+\paragraph{Opis zadania.} Utworzenie aplikacji zawierającej menu główne.
+\paragraph{Priorytet.} 8.
+\paragraph{Definition of Done.} Aplikacja po uruchomieniu wyświetla menu główne.
 
-\subsection*{<<Tutaj dodawać kolejne zadania>>}
+\subsection{Backlog Item 3}
+\paragraph{Tytuł zadania.} Dodanie uprawnień aplikacji.
+\paragraph{Opis zadania.} Dodanie uprawnień aplikacji do korzystania z Internetu i modułu GPS.
+\paragraph{Priorytet.} 10.
+\paragraph{Definition of Done.} Aplikacja posiada możliwość korzystania z Internetu i nawigacji.
+
+\subsection{Backlog Item 4}
+\paragraph{Tytuł zadania.} Stworzenie przycisku "Rozpocznij" w menu głównym oraz nadanie mu funkcjonalności.
+\paragraph{Opis zadania.} Utworzenie nowej aktywności uruchamiającej mapę Google i nanoszącej na nią znacznika wskazującego geolokalizację użytkownika. Utworzenie przycisku i nadanie mu akcji uruchomienia tejże aktywności.
+\paragraph{Priorytet.} 8.
+\paragraph{Definition of Done.} Po naciśnięciu przycisku "Rozpocznij" uruchomi moduł GPS i pokaże znacznik wskazujący aktualną pozycję użytkownika na mapie.
+
+\subsection{Backlog Item 5}
+\paragraph{Tytuł zadania.} Pobranie informacji z modułu GPS.
+\paragraph{Opis zadania.} Utworzenie nowej aktywności pobierającej surowe dane geograficzne oraz gromadzenie ich w pamięci operacyjnej.
+\paragraph{Priorytet.} 9.
+\paragraph{Definition of Done.} Surowe dane geograficzne znajdują się w pamięci operacyjnej systemu.
+
+\subsection{Backlog Item 6}
+\paragraph{Tytuł zadania.} Przetworzenie zgromadzonych informacji.
+\paragraph{Opis zadania.} Utworzenie funkcji kalkulujących dystans, prędkość, ilość spalonych kcal i upływ czasu. Przechowywanie wartości zwracanych przez funkcje w pamięci operacyjnej systemu.
+\paragraph{Priorytet.} 9.
+\paragraph{Definition of Done.} Dane zwracane przez funkcję mają odwzorowanie w rzeczywistości.
+
+%\subsection*{<<Tutaj dodawać kolejne zadania>>}
 
 \section{Sprint 1}
 \subsection{Cel} <<Określić, w jakim celu tworzony jest przyrost produktu>>.

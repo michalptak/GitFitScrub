@@ -191,23 +191,24 @@ Jako użytkownik, chcę mieć możliwość ustawienia powiadomień po określony
 
 \subsection{Backlog Item 1}
 \paragraph{Tytuł zadania.} Przygotowanie zestawu narzędzi SDK.
-\paragraph{Opis zadania.} Dodanie do zestawu SDK: Google Services, nową dystrybucję Androida (wersja Oreo), debugowanie poprzez USB.
+\paragraph{Opis zadania.} Dodanie do zestawu SDK: Google Services, nową dystrybucję Androida (wersja Oreo), debugowanie poprzez USB. Wykonanie prostego programu testującego działanie kompilatora oraz zainstalowanej dystrybucji.
 \paragraph{Priorytet.} 10.
 \paragraph{Definition of Done.} Poprawne zainstalowanie wybranych narzędzi SDK na stacjach roboczych.
 
 \subsection{Backlog Item 2}
 \paragraph{Tytuł zadania.} Stworzenie wstępnej wersji aplikacji.
-\paragraph{Opis zadania.} Utworzenie aplikacji zawierającej menu główne.
-\paragraph{Priorytet.} 8.
+\paragraph{Opis zadania.} Utworzenie aplikacji zawierającej puste menu główne.
+\paragraph{Priorytet.} 10.
 \paragraph{Definition of Done.} Aplikacja po uruchomieniu wyświetla menu główne.
 
 \subsection{Backlog Item 3}
 \paragraph{Tytuł zadania.} Dodanie uprawnień aplikacji.
-\paragraph{Opis zadania.} Dodanie uprawnień aplikacji do korzystania z Internetu i modułu GPS.
+\paragraph{Opis zadania.} Dodanie uprawnień aplikacji do korzystania z Internetu i modułu GPS, co weryfikowane jest w \ref{bl4}.
 \paragraph{Priorytet.} 10.
 \paragraph{Definition of Done.} Aplikacja posiada możliwość korzystania z Internetu i nawigacji.
 
 \subsection{Backlog Item 4}
+\label{bl4}
 \paragraph{Tytuł zadania.} Stworzenie przycisku "Rozpocznij" w menu głównym oraz nadanie mu funkcjonalności.
 \paragraph{Opis zadania.} Utworzenie nowej aktywności uruchamiającej mapę Google i nanoszącej na nią znacznika wskazującego geolokalizację użytkownika. Utworzenie przycisku i nadanie mu akcji uruchomienia tejże aktywności.
 \paragraph{Priorytet.} 8.
@@ -215,31 +216,31 @@ Jako użytkownik, chcę mieć możliwość ustawienia powiadomień po określony
 
 \subsection{Backlog Item 5}
 \paragraph{Tytuł zadania.} Pobranie informacji z modułu GPS.
-\paragraph{Opis zadania.} Utworzenie nowej aktywności pobierającej surowe dane geograficzne oraz gromadzenie ich w pamięci operacyjnej.
+\paragraph{Opis zadania.} Utworzenie nowej aktywności pobierającej surowe dane geograficzne oraz gromadzenie ich w pamięci operacyjnej. Weryfikacja poprawności uzyskanych danych poprzez wydruk w konsoli dewelopera.
 \paragraph{Priorytet.} 9.
 \paragraph{Definition of Done.} Surowe dane geograficzne znajdują się w pamięci operacyjnej systemu.
 
 \subsection{Backlog Item 6}
-\paragraph{Tytuł zadania.} Przetworzenie zgromadzonych informacji.
-\paragraph{Opis zadania.} Utworzenie funkcji kalkulujących dystans, prędkość, ilość spalonych kcal i upływ czasu. Przechowywanie wartości zwracanych przez funkcje w pamięci operacyjnej systemu.
-\paragraph{Priorytet.} 9.
-\paragraph{Definition of Done.} Dane zwracane przez funkcję mają odwzorowanie w rzeczywistości.
-
-\subsection{Backlog Item 7}
-\paragraph{Tytuł zadania.} Stworzenie panelu zawierającego statystyki aktualnego treningu.
-\paragraph{Opis zadania.} Utworzenie nowej aktywności pobierającej przetworzone dane geograficzne. Określenie pozycji wyświetlanych parametrów typu: czas, dystans, prędkość. Sprzężenie tejże aktywności z pozycjami statystyk celem ich wyświetlenia użytkownikowi.
-\paragraph{Priorytet.} 7.
-\paragraph{Definition of Done.} Wyświetlenie przetworzonych informacji pobranych z modułu GPS.
-
-\subsection{Backlog Item 8}
 \paragraph{Tytuł zadania.} Stworzenie przycisku "Rozpocznij nowy trening" oraz nadanie mu funkcjonalności.
 \paragraph{Opis zadania.} Utworzenie nowej aktywności wywołującej metodę odpowiadającej za rozpoczęcie pomiarów i rysowanie polilinii na mapie, a także otwierającej panel z aktualnymi statystykami.
 \paragraph{Priorytet.} 9.
 \paragraph{Definition of Done.} U dołu mapy, wyświetlającej naszą aktualną pozycję, widnieje przycisk rozpoczynający trening, który po naciśnięciu rozpocznie pomiary i rysowanie trasy.
 
+\subsection{Backlog Item 7}
+\paragraph{Tytuł zadania.} Przetworzenie zgromadzonych informacji.
+\paragraph{Opis zadania.} Utworzenie funkcji kalkulujących dystans, prędkość, ilość spalonych kcal i upływ czasu, które zostają wywołane po naciśnięciu przycisku "Rozpocznij nowy trening". Przechowywanie wartości zwracanych przez funkcje w pamięci operacyjnej systemu.
+\paragraph{Priorytet.} 9.
+\paragraph{Definition of Done.} Dane zwracane przez funkcję mają odwzorowanie w rzeczywistości.
+
+\subsection{Backlog Item 8}
+\paragraph{Tytuł zadania.} Stworzenie panelu zawierającego statystyki aktualnego treningu.
+\paragraph{Opis zadania.} Utworzenie nowej aktywności pobierającej przetworzone dane geograficzne. Określenie pozycji wyświetlanych parametrów typu: czas, dystans, prędkość. Sprzężenie tejże aktywności z pozycjami statystyk celem ich wyświetlenia użytkownikowi.
+\paragraph{Priorytet.} 7.
+\paragraph{Definition of Done.} Wyświetlenie przetworzonych informacji pobranych z modułu GPS.
+
 \subsection{Backlog Item 9}
 \paragraph{Tytuł zadania.} Stworzenie przycisku "Zakończ trening" oraz nadanie mu funkcjonalności.
-\paragraph{Opis zadania.} Utworzenie nowej aktywności wywołującej metodę odpowiadającej za zakończenie pomiarów i rysowanie polilinii na mapie, a także otwierającej panel z podsumowaniem treningu.
+\paragraph{Opis zadania.} Utworzenie nowej aktywności wywołującej metodę odpowiadającej za zakończenie pomiarów i rysowanie polilinii na mapie, a także otwierającej panel z podsumowaniem treningu --- wszystkich wyznaczonych statystyk.
 \paragraph{Priorytet.} 9.
 \paragraph{Definition of Done.} Po naciśnięciu "Zakończ trening" aplikacja zatrzymuje pomiary i wyświetla podsumowanie treningu.
 
@@ -252,73 +253,85 @@ Jako użytkownik, chcę mieć możliwość ustawienia powiadomień po określony
 \subsection{Backlog Item 11}
 \paragraph{Tytuł zadania.} Dodanie funkcji trybu nocnego do panelu ustawień.
 \paragraph{Opis zadania.} Dodanie przełącznika do panelu ustawień zmieniającego styl mapy oraz panelu statystyk na "nocny" lub "dzienny".
-\paragraph{Priorytet.} .
+\paragraph{Priorytet.} 5.
 \paragraph{Definition of Done.} Po naciśnięciu przełącznika mapa oraz panel statystyk zmieniają styl wyglądu na "dzienny" lub "nocny".
 
-\subsection{Backlog Item 12}
+\subsection{Backlog Item 12 (opcjonalne)}
 \paragraph{Tytuł zadania.} Dodanie aktywności logowania użytkownika.
 \paragraph{Opis zadania.} Dodanie możliwości logowania za pośrednictwem konta Google.
 \paragraph{Priorytet.} 6.
-\paragraph{Definition of Done.} Konto Google użytkownika zostaje połączone z aplikacją GitFitScrub.
+\paragraph{Definition of Done.} Konto Google użytkownika zostaje połączone z aplikacją GitFitScrub. Poprawność połączenia weryfikowana na podstawie strony "Aplikacje połączone z Twoim kontem" \url{https://myaccount.google.com/permissions}.
 
-\subsection{Backlog Item 13}
+\subsection{Backlog Item 13 (opcjonalne)}
 \paragraph{Tytuł zadania.} Dodanie aktywności wylogowania użytkownika.
 \paragraph{Opis zadania.} Dodanie możliwości wylogowania się z konta Google.
 \paragraph{Priorytet.} 6.
 \paragraph{Definition of Done.} Konto Google użytkownika zostaje rozłączone z aplikacji GitFitScrub.
 
-\subsection{Backlog Item 14}
+\subsection{Backlog Item 14 (opcjonalne)}
 \paragraph{Tytuł zadania.} Stworzenie przycisku "Zaloguj" w ustawieniach oraz nadanie mu funkcjonalności.
 \paragraph{Opis zadania.} Wywołanie metody połączenia się z kontem Google.
 \paragraph{Priorytet.} 5.
 \paragraph{Definition of Done.} Po wprowadzeniu poprawnych danych użytkownik zostaje pomyślnie uwierzytelniony.
 
-\subsection{Backlog Item 15}
+\subsection{Backlog Item 15 (opcjonalne)}
 \paragraph{Tytuł zadania.} Stworzenie przycisku "Wyloguj" w ustawieniach oraz nadanie mu funkcjonalności.
 \paragraph{Opis zadania.} Wywołanie metody rozłączenia się z kontem Google.
 \paragraph{Priorytet.} 5.
 \paragraph{Definition of Done.} Po naciśnięciu przycisku użytkownik zostaje pomyślnie wylogowany.
 
-\subsection{Backlog Item 16}
+\subsection{Backlog Item 16 (opcjonalne)}
 \paragraph{Tytuł zadania.} Utworzenie miejsca, w którym archiwizowane będą statystyki użytkownika zalogowanego.
-\paragraph{Opis zadania.} Wygenerowanie certyfikatu do autoryzacji komunikacji aplikacji z chmurą.
+\paragraph{Opis zadania.} Wygenerowanie certyfikatu do autoryzacji komunikacji aplikacji z chmurą. Sprawdzenie komunikacji baza - aplikacja poprzez wysłanie testowych informacji na chmurę.
 \paragraph{Priorytet.} 5.
-\paragraph{Definition of Done.} Aplikacja bez przeszkód komunikuje się z bazą danych w chmurze.
+\paragraph{Definition of Done.} Aplikacja bez przeszkód komunikuje się z bazą danych w chmurze Google Drive.
 
-\subsection{Backlog Item 17}
-\paragraph{Tytuł zadania.} Zmiana pseudonimu użytkownika zalogowanego.
-\paragraph{Opis zadania.} Utworzenie nowego pola w ustawieniach, którego celem będzie zmiana aktualnego pseudonimu.
+\subsection{Backlog Item 17 (opcjonalne)}
+\paragraph{Tytuł zadania.} Ustawienie pseudonimu użytkownika zalogowanego.
+\paragraph{Opis zadania.} Utworzenie nowego pola w ustawieniach, którego celem będzie ustawienie aktualnego pseudonimu.
 \paragraph{Priorytet.} 3.
-\paragraph{Definition of Done.} Użytkownik zalogowany ma możliwość zmiany pseudonimu.
+\paragraph{Definition of Done.} Użytkownik zalogowany ma możliwość ustawienia pseudonimu.
 
-\subsection{Backlog Item 18}
+\subsection{Backlog Item 18 (opcjonalne)}
 \paragraph{Tytuł zadania.} Stworzenie przycisku "Historia" w menu głównym oraz nadanie mu funkcjonalności.
 \paragraph{Opis zadania.} Utworzenie nowej aktywności do wyświetlania historii treningów.
 \paragraph{Priorytet.} 5.
 \paragraph{Definition of Done.} Użytkownik po naciśnięciu przycisku historia widzi listę odbytych treningów.
 
-\subsection{Backlog Item 19}
-\paragraph{Tytuł zadania.} Gromadzenie danych dotyczących treningów w chmurze.
-\paragraph{Opis zadania.} Po nawiązaniu połączenia z chmurą następuje przesył zgromadzonych informacji do bazy danych.
+\subsection{Backlog Item 19 (opcjonalne)}
+\paragraph{Tytuł zadania.} Gromadzenie danych dotyczących treningów w chmurze Google Drive.
+\paragraph{Opis zadania.} Po nawiązaniu połączenia z chmurą następuje przesył zgromadzonych informacji do bazy danych. Weryfikacja danych zgromadzonych w bazie poprzez sprawdzenie zawartości za pomocą interfejsu administratora.
 \paragraph{Priorytet.} 5.
 \paragraph{Definition of Done.} Dane są poprawnie gromadzone w bazie danych.
 
-\subsection{Backlog Item 20}
+\subsection{Backlog Item 20 (opcjonalne)}
 \paragraph{Tytuł zadania.} Prezentowanie danych w historii.
-\paragraph{Opis zadania.} Stworzenie nowej aktywności pobierającej dane z bazy oraz prezentującej je użytkownikowi w tabeli.
+\paragraph{Opis zadania.} Stworzenie nowej aktywności pobierającej dane z bazy oraz prezentującej je użytkownikowi w tabeli, w panelu Historia, dostępnego z menu głównego.
 \paragraph{Priorytet.} 5.
-\paragraph{Definition of Done.} Dane są poprawnie pobierane i prezentowane.
-
-
-%\subsection*{<<Tutaj dodawać kolejne zadania>>}
+\paragraph{Definition of Done.} Dane są poprawnie gromadzone w bazie danych.
 
 \section{Sprint 1}
-\subsection{Cel} <<Określić, w jakim celu tworzony jest przyrost produktu>>.
+\subsection{Cel} Utworzenie wersji bazowej aplikacji zawierającej ekran menu głównego i przycisk Rozpocznij wyświetlający mapę Google i aktualną pozycję użytkownika.
 \subsection{Sprint Planning/Backlog}
 
-\paragraph{Tytuł zadania.} <<Tytuł>>.
+\paragraph{Tytuł zadania.} Przygotowanie zestawu narzędzi SDK.
 \begin{itemize}
-\item Estymata: <<szacowana czasochłonność (w ,,koszulkach'')>>.
+\item Estymata: M.
+\end{itemize}
+
+\paragraph{Tytuł zadania.} Stworzenie wstępnej wersji aplikacji.
+\begin{itemize}
+\item Estymata: L.
+\end{itemize}
+
+\paragraph{Tytuł zadania.} Dodanie uprawnień aplikacji.
+\begin{itemize}
+\item Estymata: S.
+\end{itemize}
+
+\paragraph{Tytuł zadania.} Stworzenie przycisku "Rozpocznij" w menu głównym oraz nadanie mu funkcjonalności.
+\begin{itemize}
+\item Estymata: L.
 \end{itemize}
 
 \paragraph{Tytuł zadania.} <<Tytuł>>.
@@ -396,8 +409,6 @@ for (i=1; i<10; i++)
 \begin{thebibliography}{9}
 
 \bibitem{Cov} S. R. Covey, {\em 7 nawyków skutecznego działania}, Rebis, Poznań, 2007.
-
-\bibitem{csharp} Ian Griffiths, {\em C\# 5.0. Programowanie. Tworzenie aplikacji Windows 8, internetowych oraz biurowych w .NET 4.5 Framework}, O’Reilly, 2013.
 
 \bibitem{Oet} Tobias Oetiker i wsp., Nie za krótkie wprowadzenie do systemu \LaTeX  \ $2_\varepsilon$, \url{ftp://ftp.gust.org.pl/TeX/info/lshort/polish/lshort2e.pdf}
 

@@ -3,6 +3,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage{url}
 \usepackage{navigator}
+\usepackage{graphicx}
+\usepackage{float}
 \embeddedfile{main}{./main.tex}
 \usepackage{listings}
 \lstdefinestyle{java}
@@ -508,8 +510,12 @@ android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
 Podczas przebiegu sprintu wykonane zostały wszystkie zaplanowane zadania oraz pokryły one estymaty.
 
 Demonstracja przyrostu produktu:
-%skriny!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+    \begin{figure}[H]
+	\centering
+    	\includegraphics[height=0.6\textwidth]{img/mainMenu.png}
+	\includegraphics[height=0.6\textwidth]{img/mapsActivity.png}\\
+	{Ekran menu głównego (po lewej) oraz widok mapy, po wciśnięciu przycisku "Rozpocznij", z oznaczoną pozycją urządzenia.}
+    \end{figure}
 
 \section{Sprint 2}
 
@@ -527,7 +533,6 @@ Demonstracja przyrostu produktu:
 \item Estymata: L.
 \end{itemize}
 
-<<<<<<< HEAD
 \paragraph{Tytuł zadania.} Stworzenie przycisku "Rozpocznij nowy trening" oraz nadanie mu funkcjonalności.
 \begin{itemize}
 \item Estymata: L.
@@ -539,113 +544,10 @@ Demonstracja przyrostu produktu:
 \end{itemize}
 
 \subsection{Realizacja}
-=======
-\subsection{Realizacja} 
->>>>>>> 4c3ac29bed7bf0f9cd7b2f40645a7746cc641c07
 
-\paragraph{Tytuł zadania.} Przygotowanie zestawu narzędzi SDK.
-\subparagraph{Wykonawca.} Jan Michalik, Michał Ptak, Katarzyna Poręba.
-\subparagraph{Realizacja.} Uruchamiamy SDK Manager, następnie instalujemy składniki: Android SDK Tools, Platform Tools, Build Tools, Android 8.1.0 (API 27), Google Play services, Google USB Driver. Czasochłonność zadania pokryła estymatę.
-
-\paragraph{Tytuł zadania.} Stworzenie wstępnej wersji aplikacji.
-\subparagraph{Wykonawca.} Katarzyna Poręba.
-\subparagraph{Realizacja.} Utworzenie nowego pustego projektu Android Studio. Dodanie nowej aktywności - MainMenu. Ustawienie jej jako domyślny ekran po uruchomieniu aplikacji.
-\begin{lstlisting}[style=xml]
-	<activity
-	android:name=".MainMenu"
-	android:label="GitFitScrub"
-	android:theme="@style/AppTheme">
-	<intent-filter>
-		<action android:name="android.intent.action.MAIN" />
-		<category android:name="android.intent.category.LAUNCHER" />
-	</intent-filter>
-</activity>
-\end{lstlisting}
-
-\paragraph{Tytuł zadania.} Dodanie uprawnień aplikacji.
-\subparagraph{Wykonawca.} Michał Ptak.
-\subparagraph{Realizacja.} Uzupełnienie pliku AndroidManifest.xml o polecenia zezwalające na dostęp do Internetu i modułu GPS. Kompilacja kodu i wygenerowanie pliku .apk, następnie instalacja na urządzeniu z systemem Android. Podczas instalacji urządzenie poprawnie wyświetla informacje o wykorzystywanych funkcjonalnościach.
-Plik AndroidManifest.xml:
-\begin{lstlisting}[style=xml]
-	<uses-permission android:name="android.permission.INTERNET"/>
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-\end{lstlisting}
-
-\paragraph{Tytuł zadania.} Stworzenie przycisku "Rozpocznij" w menu głównym oraz nadanie mu funkcjonalności.
-\subparagraph{Wykonawca.} Jan Michalik.
-\subparagraph{Realizacja.} Uzupełnienie pliku activity\verb|_|main\verb|_|menu.xml o polecenia tworzące przycisk "Rozpocznij", oraz nadanie mu określonego wyglądu.
-\begin{lstlisting}[style=xml]
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#dddddd"
-    tools:context="pl.ppm.gitfitscrub.MainMenu">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/button2"
-        android:layout_alignParentStart="true"
-        android:src="@drawable/capture" />
-
-    <Button
-        android:id="@+id/button2"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="400px"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/button3"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="20dp"
-        android:onClick="run"
-        android:text="Rozpocznij"
-		android:textSize="24sp" />
-</RelativeLayout>
-
-\end{lstlisting}
-Nadanie funkcjonalności przyciskowi. Dodanie kodu do pliku MainMenu.java, który spowoduje, że po naciśnięci przycisku otworzy się mapa z aktualną pozycją użytkownika.\\
-Plik MainMenu.java - menu główne:
-\begin{lstlisting}[style=java]
-	public class MainMenu extends AppCompatActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
-    }
-    public void run(View view) {
-        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-        startActivity(intent);
-    }
-};
-\end{lstlisting}
-Plik MapsActivity.java - ekran mapy:
-\begin{lstlisting}[style=java]
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-
-    private GoogleMap mMap;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate ( savedInstanceState );
-        setContentView ( R.layout.activity_maps );
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager ()
-                .findFragmentById ( R.id.map );
-        mapFragment.getMapAsync ( this );
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-		LatLng ns = new LatLng ( posY, posX );
-		if (ActivityCompat.checkSelfPermission ( this, Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission ( this, Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED) {
-			mMap.setMyLocationEnabled ( true );
-		}
-	}
-}
-\end{lstlisting}
+\paragraph{Tytuł zadania.} <<Tytuł>>.
+\subparagraph{Wykonawca.} <<Wykonawca>>.
+\subparagraph{Realizacja.}
 
 \subsection{Sprint Review/Demo}
 <<Sprawozdanie z przeglądu Sprint'u -- czy założony cel (przyrost) został osiągnięty oraz czy wszystkie zaplanowane Backlog Item'y zostały zrealizowane? Demostracja przyrostu produktu>>.

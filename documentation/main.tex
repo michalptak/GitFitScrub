@@ -545,6 +545,71 @@ Demonstracja przyrostu produktu:
 
 \subsection{Realizacja}
 
+\paragraph{Tytuł zadania.} Stworzenie alertu o braku aktywacji modułu GPS.
+\subparagraph{Wykonawca.} Katarzyna Poręba
+\subparagraph{Realizacja.} Utworzenie alertu, powiadamiającego użytkowania o wyłączonym GPS-ie, przy pomocy biblioteki android.support.v7.app.AlertDialog. \\
+Utworzenie funkcji wyświetlającej alert:
+\begin{lstlisting}[style=java]
+private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Twoj GPS jest wylaczony. Czy chcesz go wlaczyc?")
+                .setCancelable(false)
+                .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+\end{lstlisting}
+Utworzenie warunku sprawdzającego, czy GPS jest wyłączony:
+\begin{lstlisting}[style=java]
+if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {buildAlertMessageNoGps();}
+\end{lstlisting}
+
+\paragraph{Tytuł zadania.} <<Tytuł>>.
+\subparagraph{Wykonawca.} <<Wykonawca>>.
+\subparagraph{Realizacja.}
+
+\paragraph{Tytuł zadania.} Stworzenie przycisku "Rozpocznij nowy trening" oraz nadanie mu funkcjonalności.
+\subparagraph{Wykonawca.} Katarzyna Poręba
+\subparagraph{Realizacja.} Początkowym założeniem było, że po naciśnięciu przycisku panel będzie się otwierał i będą rozpoczęte pomiary. Panel został utworzony, jednak nie jest otwierany przez przycisk. Został on umieszczony bezpośrednio w aktywności mapy. Nazwę przycisku zmieniono na "Start", rozpoczyna on pomiary.
+\begin{lstlisting}[style=xml]
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/start_button"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/colorAccent"
+        android:padding="5dp"
+        android:text="start"
+        android:textColor="#ffffff" />
+
+    <TextView
+        android:id="@+id/tekst1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Przykladowy tekst"
+        android:textColor="#000000"
+        android:textSize="20dp"/>
+
+</LinearLayout>
+\end{lstlisting}
+
 \paragraph{Tytuł zadania.} <<Tytuł>>.
 \subparagraph{Wykonawca.} <<Wykonawca>>.
 \subparagraph{Realizacja.}

@@ -1,12 +1,9 @@
 package pl.ppm.gitfitscrub;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -97,32 +94,12 @@ public class MapsActivity extends FragmentActivity
         }
     }
 
-    private void buildAlertMessageNoGps() {
-        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-        builder.setMessage("Twój GPS jest wyłączony. Czy chcesz go włączyć?")
-                .setCancelable(false)
-                .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }
-                })
-                .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        dialog.cancel();
-                    }
-                });
-        final android.app.AlertDialog alert = builder.create();
-        alert.show();
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
         mGoogleMap=googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) { buildAlertMessageNoGps();}
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
@@ -151,8 +128,8 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onConnected(Bundle bundle) {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(4000);
-        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(100);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -187,7 +164,7 @@ public class MapsActivity extends FragmentActivity
                     lEnd = mLastLocation;
                 }
 
-                speed = location.getSpeed() * 18 / 5;
+                speed = location.getSpeed() * 3.6;
 
                 updateUI();
 
@@ -202,7 +179,7 @@ public class MapsActivity extends FragmentActivity
         else
             speedText.setText("obliczam predkosc...");
 
-        distanceText.setText(new DecimalFormat("#.###").format(distance) + " km");
+        distanceText.setText("dystans: " + new DecimalFormat("#.###").format(distance) + " km");
 
         lStart = lEnd;
     }

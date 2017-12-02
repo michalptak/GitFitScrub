@@ -234,10 +234,10 @@ Jako użytkownik, chcę mieć możliwość ustawienia powiadomień po określony
 \paragraph{Definition of Done.} Surowe dane geograficzne znajdują się w pamięci operacyjnej systemu.
 
 \subsection{Backlog Item 7}
-\paragraph{Tytuł zadania.} Stworzenie przycisku "Rozpocznij nowy trening" oraz nadanie mu funkcjonalności.
-\paragraph{Opis zadania.} Utworzenie nowej aktywności wywołującej metodę odpowiadającej za wysunięcie pustego panelu statystyk.
+\paragraph{Tytuł zadania.} Utworzenie pustego panelu statystyk i przycisku "Start" oraz nadanie mu funkcjonalności.
+\paragraph{Opis zadania.} Utworzenie nowego obiektu button wywołującego metody rozpoczynające pomiary po jego wciśnięciu. Wydzielenie obszaru, na którym będą wyświetlane statystyki.
 \paragraph{Priorytet.} 9.
-\paragraph{Definition of Done.} U dołu mapy, wyświetlającej naszą aktualną pozycję, widnieje przycisk rozpoczynający trening, który po naciśnięciu wysunie panel ze statystykami.
+\paragraph{Definition of Done.} U dołu mapy, wyświetlającej naszą aktualną pozycję, widnieje przycisk rozpoczynający trening, a pod nim panel ze statystykami.
 
 \subsection{Backlog Item 8}
 \paragraph{Tytuł zadania.} Przetworzenie zgromadzonych informacji.
@@ -519,7 +519,7 @@ Demonstracja przyrostu produktu:
 
 \section{Sprint 2}
 
-\subsection{Cel} Pobranie i przetworzenie danych na postawie geolokalizacji użytkownika oraz wyświetlanie wybranych informacji (średnia prędkość, czas i dystans).
+\subsection{Cel} Pobranie i przetworzenie danych na postawie geolokalizacji użytkownika oraz utworzenie przycisku wysuwającego panel wyświetlający wybrane informacje (aktualną prędkość, czas i dystans).
 
 \subsection{Sprint Planning/Backlog}
 
@@ -546,7 +546,7 @@ Demonstracja przyrostu produktu:
 \subsection{Realizacja}
 
 \paragraph{Tytuł zadania.} Stworzenie alertu o braku aktywacji modułu GPS.
-\subparagraph{Wykonawca.} Katarzyna Poręba
+\subparagraph{Wykonawca.} Katarzyna Poręba.
 \subparagraph{Realizacja.} Utworzenie alertu, powiadamiającego użytkowania o wyłączonym GPS-ie, przy pomocy biblioteki android.support.v7.app.AlertDialog. \\
 Utworzenie funkcji wyświetlającej alert:
 \begin{lstlisting}[style=java]
@@ -573,13 +573,113 @@ Utworzenie warunku sprawdzającego, czy GPS jest wyłączony:
 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {buildAlertMessageNoGps();}
 \end{lstlisting}
 
-\paragraph{Tytuł zadania.} <<Tytuł>>.
-\subparagraph{Wykonawca.} <<Wykonawca>>.
-\subparagraph{Realizacja.}
+\paragraph{Tytuł zadania.} Pobranie informacji z modułu GPS.
+\subparagraph{Wykonawca.} Michał Ptak.
+\subparagraph{Realizacja.} Utworzenie metod nasłuchujących zmian w informacjach dostarczanych przez moduł GPS w oparciu o Google Play Services.\\
+Plik MapsActivity.java:
+\begin{lstlisting}[style=java]
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFrag.getMapAsync(this);
+
+        (...)      
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mFusedLocationClient != null) {
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap)
+    {
+        mGoogleMap=googleMap;
+        mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                buildGoogleApiClient();
+                mGoogleMap.setMyLocationEnabled(true);
+            } else {
+                checkLocationPermission();
+            }
+        }
+        else {
+            buildGoogleApiClient();
+            mGoogleMap.setMyLocationEnabled(true);
+        }
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(100);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+        }
+    }
+
+    LocationCallback mLocationCallback = new LocationCallback(){
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            for (Location location : locationResult.getLocations()) {
+                Log.i("MapsActivity", "Location: " + location.getLatitude() + " " + location.getLongitude());
+                mLastLocation = location;
+                if (mCurrLocationMarker !=null) {
+                    mCurrLocationMarker.remove();
+                }
+
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title("Tu jestem!");
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
+
+                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+
+            }
+        }
+    };
+
+    @Override
+    public void onConnectionSuspended(int i) {}
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {}
+\end{lstlisting}
+
 
 \paragraph{Tytuł zadania.} Stworzenie przycisku "Rozpocznij nowy trening" oraz nadanie mu funkcjonalności.
-\subparagraph{Wykonawca.} Katarzyna Poręba
-\subparagraph{Realizacja.} Początkowym założeniem było, że po naciśnięciu przycisku panel będzie się otwierał i będą rozpoczęte pomiary. Panel został utworzony, jednak nie jest otwierany przez przycisk. Został on umieszczony bezpośrednio w aktywności mapy. Nazwę przycisku zmieniono na "Start", rozpoczyna on pomiary.
+\subparagraph{Wykonawca.} Katarzyna Poręba, Jan Michalik.
+\subparagraph{Realizacja.} Początkowym założeniem było, że po naciśnięciu przycisku panel będzie się otwierał i będą rozpoczęte pomiary. Panel został utworzony, jednak nie jest otwierany przez przycisk. Został on umieszczony bezpośrednio w aktywności mapy. Nazwę przycisku zmieniono na "Start", rozpoczyna on pomiary.\\
+Plik \verb!activity_maps.xml!:
 \begin{lstlisting}[style=xml]
 <?xml version="1.0" encoding="utf-8"?>
 
@@ -587,6 +687,16 @@ if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {buildAler
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        tools:context="pl.ppm.gitfitscrub.MapsActivity" />
 
     <Button
         android:id="@+id/start_button"
@@ -598,26 +708,175 @@ if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {buildAler
         android:text="start"
         android:textColor="#ffffff" />
 
+
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="#000000"
+        android:textSize="20dp" />
+
     <TextView
-        android:id="@+id/tekst1"
+        android:id="@+id/speedText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Przykladowy tekst"
+        android:text="Predkosc: "
+        android:textColor="#000000"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:id="@+id/distanceText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Dystans: "
         android:textColor="#000000"
         android:textSize="20dp"/>
 
 </LinearLayout>
 \end{lstlisting}
 
+Plik MapsActivity.java:
+\begin{lstlisting}[style=java]
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        (...)
+        mStartButton = (Button) findViewById(R.id.start_button);
+        mChronometer = (Chronometer) findViewById(R.id.chronometer);
+
+        distanceText = (TextView) findViewById(R.id.distanceText);
+        speedText = (TextView) findViewById(R.id.speedText);
+
+        mStartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mChronometer.setBase(SystemClock.elapsedRealtime());
+                mChronometer.start();
+            }
+        });
+
+    }
+
+    LocationCallback mLocationCallback = new LocationCallback(){
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            for (Location location : locationResult.getLocations()) {
+ 	     (...)
+                updateUI();
+            }
+        }
+    };
+
+    private void updateUI() {
+        distance = distance + (lStart.distanceTo(lEnd) / 1000.00);
+        if (speed > 0.0)
+            speedText.setText("predkosc: " + new DecimalFormat("#.##").format(speed) + " km/h");
+        else
+            speedText.setText("obliczam predkosc...");
+
+        distanceText.setText("dystans: " + new DecimalFormat("#.###").format(distance) + " km");
+
+        lStart = lEnd;
+    }
+
+
+\end{lstlisting}
+
+
+
+\paragraph{Tytuł zadania.} Przetworzenie zgromadzonych informacji.
+\subparagraph{Wykonawca.} Michał Ptak.
+\subparagraph{Realizacja.} Dystans w kilometrach liczony jest poprzez dodawanie długości kolejnych pokonywanych odcinków (droga pokonana pomiędzy dwoma aktalizacjami lokalizacji) do dystansu całkowitego, przy pomocy metody distanceTo(). Do pobierania prędkości wykorzystana została metoda getSpeed(), zwracająca prędkość w m/s, która została przeliczona na km/h. \\
+Plik MapsActivity.java:
+\begin{lstlisting}[style=java]
+    @Override
+    protected void onPause() {
+	(...)
+            distance = 0;
+        }
+    }
+
+    LocationCallback mLocationCallback = new LocationCallback(){
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            for (Location location : locationResult.getLocations()) {
+	     (...)
+                if (lStart == null) {
+                    lStart = mLastLocation;
+                    lEnd = mLastLocation;
+                } else {
+                    lEnd = mLastLocation;
+                }
+
+                speed = location.getSpeed() * 3.6;
+
+            }
+        }
+    };
+\end{lstlisting}
+
+
+\subsection{Sprint Review/Demo}
+Założony cel sprintu został osiągnięty. Estymowana czasochłonność dla zadań 2-4 była błędna - zadania 2 i 3 wymagały większego nakładu pracy niż założono, natomiast zadanie ostatnie - przeciwnie.
+
+Demonstracja przyrostu produktu:
+    \begin{figure}[H]
+	\centering
+    	\includegraphics[height=0.6\textwidth]{img/mapsActivityPanel.png}\\
+	{Widok mapy oraz panelu ze statystykami po wciśnięciu przycisku "START", z oznaczoną znacznikiem pozycją urządzenia.}
+    \end{figure}
+
+
+
+\section{Sprint 3}
+
+\subsection{Cel} Uaktualnienie panelu statystyk, rysowanie śladu na mapie oraz utworzenie aktywności "Ustawienia".
+
+\subsection{Sprint Planning/Backlog}
+
+\paragraph{Tytuł zadania.} Modyfikacja panelu zawierającego statystyki aktualnego treningu.
+\begin{itemize}
+\item Estymata: XL
+\end{itemize}
+
+\paragraph{Tytuł zadania.} Rysowanie polilinii na mapie.
+\begin{itemize}
+\item Estymata: XL
+\end{itemize}
+
+\paragraph{Tytuł zadania.} Stworzenie przycisku "Ustawienia" w menu głównym oraz nadanie mu funkcjonalności.
+\begin{itemize}
+\item Estymata: M
+\end{itemize}
+
+\paragraph{<<Tutaj dodawać kolejne zadania>>}
+
+\subsection{Realizacja}
+
 \paragraph{Tytuł zadania.} <<Tytuł>>.
 \subparagraph{Wykonawca.} <<Wykonawca>>.
-\subparagraph{Realizacja.}
+\subparagraph{Realizacja.} <<Sprawozdanie z realizacji zadania (w tym ocena zgodności z estymatą). Kod programu (środowisko \texttt{verbatim}): \begin{verbatim}
+for (i=1; i<10; i++)
+...
+\end{verbatim}>>.
+
+\paragraph{Tytuł zadania.} <<Tytuł>>.
+\subparagraph{Wykonawca.} <<Wykonawca>>.
+\subparagraph{Realizacja.} <<Sprawozdanie z realizacji zadania (w tym ocena zgodności z estymatą). Kod programu (środowisko \texttt{verbatim}): \begin{verbatim}
+for (i=1; i<10; i++)
+...
+\end{verbatim}>>.
+
+\paragraph{<<Tutaj dodawać kolejne zadania>>}
+
 
 \subsection{Sprint Review/Demo}
 <<Sprawozdanie z przeglądu Sprint'u -- czy założony cel (przyrost) został osiągnięty oraz czy wszystkie zaplanowane Backlog Item'y zostały zrealizowane? Demostracja przyrostu produktu>>.
 
-\section{Sprint 3}
+
+\section{Sprint 4}
 
 \subsection{Cel} <<Określić, w jakim celu tworzony jest przyrost produktu>>.
 
@@ -657,6 +916,45 @@ for (i=1; i<10; i++)
 \subsection{Sprint Review/Demo}
 <<Sprawozdanie z przeglądu Sprint'u -- czy założony cel (przyrost) został osiągnięty oraz czy wszystkie zaplanowane Backlog Item'y zostały zrealizowane? Demostracja przyrostu produktu>>.
 
+\section{Sprint 5}
+
+\subsection{Cel} <<Określić, w jakim celu tworzony jest przyrost produktu>>.
+
+\subsection{Sprint Planning/Backlog}
+
+\paragraph{Tytuł zadania.} <<Tytuł>>.
+\begin{itemize}
+\item Estymata: <<szacowana czasochłonność (w ,,koszulkach'')>>.
+\end{itemize}
+
+\paragraph{Tytuł zadania.} <<Tytuł>>.
+\begin{itemize}
+\item Estymata: <<szacowana czasochłonność (w ,,koszulkach'')>>.
+\end{itemize}
+
+\paragraph{<<Tutaj dodawać kolejne zadania>>}
+
+\subsection{Realizacja}
+
+\paragraph{Tytuł zadania.} <<Tytuł>>.
+\subparagraph{Wykonawca.} <<Wykonawca>>.
+\subparagraph{Realizacja.} <<Sprawozdanie z realizacji zadania (w tym ocena zgodności z estymatą). Kod programu (środowisko \texttt{verbatim}): \begin{verbatim}
+for (i=1; i<10; i++)
+...
+\end{verbatim}>>.
+
+\paragraph{Tytuł zadania.} <<Tytuł>>.
+\subparagraph{Wykonawca.} <<Wykonawca>>.
+\subparagraph{Realizacja.} <<Sprawozdanie z realizacji zadania (w tym ocena zgodności z estymatą). Kod programu (środowisko \texttt{verbatim}): \begin{verbatim}
+for (i=1; i<10; i++)
+...
+\end{verbatim}>>.
+
+\paragraph{<<Tutaj dodawać kolejne zadania>>}
+
+
+\subsection{Sprint Review/Demo}
+<<Sprawozdanie z przeglądu Sprint'u -- czy założony cel (przyrost) został osiągnięty oraz czy wszystkie zaplanowane Backlog Item'y zostały zrealizowane? Demostracja przyrostu produktu>>.
 \section*{<<Tutaj dodawać kolejne Sprint'y>>}
 
 

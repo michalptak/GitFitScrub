@@ -1,9 +1,13 @@
 package pl.ppm.gitfitscrub;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -18,6 +22,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.gms.maps.model.*;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -55,6 +60,8 @@ public class MapsActivity extends FragmentActivity
     private Chronometer mChronometer;
     private Button mStartButton;
     static TextView distanceText, speedText;
+    boolean StartB = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +82,7 @@ public class MapsActivity extends FragmentActivity
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                StartB = true;
                 mChronometer.setBase(SystemClock.elapsedRealtime());
                 mChronometer.start();
             }
@@ -94,12 +102,32 @@ public class MapsActivity extends FragmentActivity
         }
     }
 
+    private void buildAlertMessageNoGps() {
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setMessage("Twój GPS jest wyłączony. Czy chcesz go włączyć?")
+                .setCancelable(false)
+                .setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final android.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
         mGoogleMap=googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) { buildAlertMessageNoGps();}
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
@@ -152,21 +180,27 @@ public class MapsActivity extends FragmentActivity
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
                 markerOptions.title("Tu jestem!");
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
                 mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
 
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+                if(StartB) {
+                    if (lStart == null) {
+                        lStart = mLastLocation;
+                        lEnd = mLastLocation;
+                    } else {
+                        lEnd = mLastLocation;
 
-                if (lStart == null) {
-                    lStart = mLastLocation;
-                    lEnd = mLastLocation;
-                } else {
-                    lEnd = mLastLocation;
+                    }
+                    Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
+                            .add(new LatLng(lStart.getLatitude(), lStart.getLongitude()), new LatLng(lEnd.getLatitude(), lEnd.getLongitude()))
+                            .width(8)
+                            .color(Color.GREEN));
+
+                    speed = location.getSpeed() * 3.6;
+
+                    updateUI();
                 }
-
-                speed = location.getSpeed() * 3.6;
-
-                updateUI();
 
             }
         }

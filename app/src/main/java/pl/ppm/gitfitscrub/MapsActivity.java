@@ -96,10 +96,7 @@ public class MapsActivity extends FragmentActivity
     protected void onPause() {
         super.onPause();
 
-        if (mFusedLocationClient != null) {
-            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-            distance = 0;
-        }
+
     }
 
     private void buildAlertMessageNoGps() {

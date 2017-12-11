@@ -862,12 +862,24 @@ for (i=1; i<10; i++)
 ...
 \end{verbatim}>>.
 
+\paragraph{Tytuł zadania.} Rysowanie polilinii na mapie.
+\subparagraph{Wykonawca.} Katarzyna Poręba
+\subparagraph{Realizacja.} Utworzenie polilinii przy użyciu metody mapy google \textit{addPolyline}. Ustalenie koloru i szerokości linii. Przekazanie zmiennych zawierających współrzędne geograficzne do funkcji \textit{add} rysującej polilinie.
+\begin{lstlisting}[style=java]
+ Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
+    .add(new LatLng(lStart.getLatitude(), lStart.getLongitude()), 
+        new LatLng(lEnd.getLatitude(), lEnd.getLongitude()))
+    .width(8)
+    .color(Color.GREEN));
+\end{lstlisting}
+
 \paragraph{Tytuł zadania.} <<Tytuł>>.
 \subparagraph{Wykonawca.} <<Wykonawca>>.
 \subparagraph{Realizacja.} <<Sprawozdanie z realizacji zadania (w tym ocena zgodności z estymatą). Kod programu (środowisko \texttt{verbatim}): \begin{verbatim}
 for (i=1; i<10; i++)
 ...
 \end{verbatim}>>.
+
 
 \paragraph{<<Tutaj dodawać kolejne zadania>>}
 

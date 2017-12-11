@@ -22,8 +22,8 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.android.gms.maps.model.*;
 
+import com.google.android.gms.maps.model.*;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -42,12 +42,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.DecimalFormat;
 
-public class MapsActivity extends FragmentActivity
-        implements OnMapReadyCallback,
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
-
-
     GoogleMap mGoogleMap;
     SupportMapFragment mapFrag;
     LocationRequest mLocationRequest;
@@ -61,7 +58,6 @@ public class MapsActivity extends FragmentActivity
     private Button mStartButton;
     static TextView distanceText, speedText;
     boolean StartB = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,16 +83,11 @@ public class MapsActivity extends FragmentActivity
                 mChronometer.start();
             }
         });
-
     }
-
-
 
     @Override
     protected void onPause() {
         super.onPause();
-
-
     }
 
     private void buildAlertMessageNoGps() {
@@ -163,6 +154,7 @@ public class MapsActivity extends FragmentActivity
         }
     }
 
+
     LocationCallback mLocationCallback = new LocationCallback(){
         @Override
         public void onLocationResult(LocationResult locationResult) {
@@ -172,14 +164,12 @@ public class MapsActivity extends FragmentActivity
                 if (mCurrLocationMarker !=null) {
                     mCurrLocationMarker.remove();
                 }
-
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
                 markerOptions.title("Tu jestem!");
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
                 mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
-
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
                 if(StartB) {
                     if (lStart == null) {
@@ -187,7 +177,6 @@ public class MapsActivity extends FragmentActivity
                         lEnd = mLastLocation;
                     } else {
                         lEnd = mLastLocation;
-
                     }
                     Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
                             .add(new LatLng(lStart.getLatitude(), lStart.getLongitude()), new LatLng(lEnd.getLatitude(), lEnd.getLongitude()))
@@ -198,7 +187,6 @@ public class MapsActivity extends FragmentActivity
 
                     updateUI();
                 }
-
             }
         }
     };
@@ -206,11 +194,13 @@ public class MapsActivity extends FragmentActivity
     private void updateUI() {
         distance = distance + (lStart.distanceTo(lEnd) / 1000.00);
         if (speed > 0.0)
-            speedText.setText("predkosc: " + new DecimalFormat("#.##").format(speed) + " km/h");
+            speedText.setText(new DecimalFormat("#.##").format(speed) + " km/h");
         else
-            speedText.setText("obliczam predkosc...");
-
-        distanceText.setText("dystans: " + new DecimalFormat("#.###").format(distance) + " km");
+            speedText.setText("-.--");
+        if (distance > 0.0)
+            distanceText.setText(new DecimalFormat("#.###").format(distance) + " km");
+        else
+            speedText.setText("0 km");
 
         lStart = lEnd;
     }
@@ -221,7 +211,6 @@ public class MapsActivity extends FragmentActivity
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {}
 
-
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -229,8 +218,8 @@ public class MapsActivity extends FragmentActivity
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
                 new AlertDialog.Builder(this)
-                        .setTitle("Wymagane sa uprawnienia lokalizacji")
-                        .setMessage("Aplikacja wymaga uprawnien do lokalizacji aby funkcjonowac poprawnie.")
+                        .setTitle("Wymagane są uprawnienia lokalizacji")
+                        .setMessage("Aplikacja wymaga uprawnień do lokalizacji aby funkcjonować poprawnie.")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -250,8 +239,7 @@ public class MapsActivity extends FragmentActivity
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION: {
                 if (grantResults.length > 0
@@ -267,12 +255,10 @@ public class MapsActivity extends FragmentActivity
                     }
 
                 } else {
-
                     Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
                 }
                 return;
             }
-
         }
     }
 }

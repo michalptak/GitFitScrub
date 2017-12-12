@@ -851,16 +851,122 @@ Demonstracja przyrostu produktu:
 \item Estymata: M
 \end{itemize}
 
-\paragraph{<<Tutaj dodawać kolejne zadania>>}
-
 \subsection{Realizacja}
 
-\paragraph{Tytuł zadania.} <<Tytuł>>.
-\subparagraph{Wykonawca.} <<Wykonawca>>.
-\subparagraph{Realizacja.} <<Sprawozdanie z realizacji zadania (w tym ocena zgodności z estymatą). Kod programu (środowisko \texttt{verbatim}): \begin{verbatim}
-for (i=1; i<10; i++)
-...
-\end{verbatim}>>.
+\paragraph{Tytuł zadania.} Modyfikacja panelu zawierającego statystyki aktualnego treningu.
+\subparagraph{Wykonawca.} Jan Michalik, Michał Ptak
+\subparagraph{Realizacja.} Zaplanowanie struktury interfejsu panelu statystyk. Wprowadzenie zmian do pliku activity\verb|_|maps.xml.
+\begin{lstlisting}[style=xml]
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/speedText"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:textSize="42sp" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PREDKOSC"
+            android:textAlignment="center" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Chronometer
+                android:id="@+id/chronometer"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="50dp"
+                android:layout_weight="1"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/distanceText"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="#000000"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="CZAS"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="DYSTANS"
+                    android:textAlignment="center" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/start_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:padding="5dp"
+            android:text="start"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+\end{lstlisting}
 
 \paragraph{Tytuł zadania.} Rysowanie polilinii na mapie.
 \subparagraph{Wykonawca.} Katarzyna Poręba
@@ -873,43 +979,73 @@ for (i=1; i<10; i++)
     .color(Color.GREEN));
 \end{lstlisting}
 
-\paragraph{Tytuł zadania.} <<Tytuł>>.
-\subparagraph{Wykonawca.} <<Wykonawca>>.
-\subparagraph{Realizacja.} <<Sprawozdanie z realizacji zadania (w tym ocena zgodności z estymatą). Kod programu (środowisko \texttt{verbatim}): \begin{verbatim}
-for (i=1; i<10; i++)
-...
-\end{verbatim}>>.
+\paragraph{Tytuł zadania.} Stworzenie przycisku "Ustawienia" w menu głównym oraz nadanie mu funkcjonalności.
+\subparagraph{Wykonawca.} Jan Michalik
+\subparagraph{Realizacja.} Stworzenie nowej aktywności "Ustawienia" (pustej), do której przechodzimy po wciśnięciu przycisku "Ustawienia" w menu głównym.\\
+Plik SettingsActivity.java
+ \begin{lstlisting}[style=java]
+ package pl.ppm.gitfitscrub;
 
+import android.os.Bundle;
+import android.app.Activity;
 
-\paragraph{<<Tutaj dodawać kolejne zadania>>}
+public class SettingsActivity extends Activity {
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate ( savedInstanceState );
+        setContentView ( R.layout.activity_settings );
+    }
+
+}
+ \end{lstlisting}
+ Plik activity\verb|_|settings.xml
+ \begin{lstlisting}[style=xml]
+ <?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#dddddd"
+    tools:context="pl.ppm.gitfitscrub.SettingsActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:text="Ustawienia"
+        android:textAlignment="center"
+        android:textColor="#008000"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="8dp" />
+</android.support.constraint.ConstraintLayout>
+
+\end{lstlisting}
 
 \subsection{Sprint Review/Demo}
-<<Sprawozdanie z przeglądu Sprint'u -- czy założony cel (przyrost) został osiągnięty oraz czy wszystkie zaplanowane Backlog Item'y zostały zrealizowane? Demostracja przyrostu produktu>>.
-
+Założony cel sprintu został w pełni zrealizowany. Estymaty czasochłonności poszczególnych zadań pokryły się z rzeczywistym nakładem pracy.
+%scriny!!!!
 
 \section{Sprint 4}
 
-\subsection{Cel} <<Określić, w jakim celu tworzony jest przyrost produktu>>.
+\subsection{Cel} Utworzenie przełącznika w ustawieniach, odpowiadającego za aktywację trybu nocnego.
 
 \subsection{Sprint Planning/Backlog}
 
-\paragraph{Tytuł zadania.} <<Tytuł>>.
+\paragraph{Tytuł zadania.} Dodanie funkcji trybu nocnego do panelu ustawień.
 \begin{itemize}
-\item Estymata: <<szacowana czasochłonność (w ,,koszulkach'')>>.
+\item Estymata: L
 \end{itemize}
 
-\paragraph{Tytuł zadania.} <<Tytuł>>.
-\begin{itemize}
-\item Estymata: <<szacowana czasochłonność (w ,,koszulkach'')>>.
-\end{itemize}
-
-\paragraph{<<Tutaj dodawać kolejne zadania>>}
 
 \subsection{Realizacja}
 
-\paragraph{Tytuł zadania.} <<Tytuł>>.
-\subparagraph{Wykonawca.} <<Wykonawca>>.
+\paragraph{Tytuł zadania.} Dodanie funkcji trybu nocnego do panelu ustawień.
+\subparagraph{Wykonawca.} Jan Michalik, Katarzyna Poręba, Michał Ptak.
 \subparagraph{Realizacja.} <<Sprawozdanie z realizacji zadania (w tym ocena zgodności z estymatą). Kod programu (środowisko \texttt{verbatim}): \begin{verbatim}
 for (i=1; i<10; i++)
 ...

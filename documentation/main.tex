@@ -9,6 +9,8 @@
 \usepackage{listings}
 \lstdefinestyle{java}
 {basicstyle=\ttfamily\supertiny,language=java,tabsize=4,showspaces=false,showstringspaces=false,xleftmargin=0cm,basicstyle=\ttfamily,columns=fullflexible,keepspaces=true,frame=none,breaklines=true}
+\lstdefinestyle{json}
+{basicstyle=\ttfamily\supertiny,language=java,tabsize=4,showspaces=false,showstringspaces=false,xleftmargin=0cm,basicstyle=\ttfamily,columns=fullflexible,keepspaces=true,frame=none,breaklines=true}
 \lstdefinestyle{xml}
 {basicstyle=\ttfamily\supertiny,language=xml,tabsize=4,showspaces=false,showstringspaces=false,xleftmargin=0cm,basicstyle=\ttfamily,columns=fullflexible,keepspaces=true,frame=none,breaklines=true}
 
@@ -1052,20 +1054,292 @@ Demonstracja przyrostu produktu:
 
 \paragraph{Tytuł zadania.} Dodanie funkcji trybu nocnego do panelu ustawień.
 \subparagraph{Wykonawca.} Jan Michalik, Katarzyna Poręba, Michał Ptak.
-\subparagraph{Realizacja.} <<Sprawozdanie z realizacji zadania (w tym ocena zgodności z estymatą). Kod programu (środowisko \texttt{verbatim}): \begin{verbatim}
-for (i=1; i<10; i++)
-...
-\end{verbatim}>>.
+\subparagraph{Realizacja.} W aktywności ustawienia został dodany przełącznik umożliwiający zmianę trybu na nocny. Stworzony został skrypt zmieniający wygląd mapy. Zmienione zostały kolory panelu.\\
+ Plik activity\verb|_|settings.xml
+\begin{lstlisting}[style=xml]
+<Switch
+        android:id="@+id/nightmode"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tryb nocny"
+        android:textSize="24sp"
+        android:checked="false"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="111dp"
+        tools:layout_editor_absoluteY="44dp" />
+\end{lstlisting}
+ Plik SettingsActivity.java
+\begin{lstlisting}[style=java]
+import android.widget.Switch;
+import android.widget.CompoundButton;
+import android.widget.Toast;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.content.SharedPreferences;
 
-\paragraph{Tytuł zadania.} <<Tytuł>>.
-\subparagraph{Wykonawca.} <<Wykonawca>>.
-\subparagraph{Realizacja.} <<Sprawozdanie z realizacji zadania (w tym ocena zgodności z estymatą). Kod programu (środowisko \texttt{verbatim}): \begin{verbatim}
-for (i=1; i<10; i++)
-...
-\end{verbatim}>>.
+public class SettingsActivity extends Activity {
+    int night = 1;
 
-\paragraph{<<Tutaj dodawać kolejne zadania>>}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
+        Switch switch1 = findViewById(R.id.nightmode);
+        SharedPreferences prefs = getSharedPreferences("database", MODE_PRIVATE);
+        night = prefs.getInt("night", 1);
+        if (night == 1) {
+            switch1.setChecked ( false );
+        } else {
+            switch1.setChecked ( true );
+        }
+        switch1.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    Toast.makeText(getApplicationContext(), "Wlaczono tryb nocny", Toast.LENGTH_LONG).show();
+                    SharedPreferences prefs = getSharedPreferences("database", Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putInt("night", 2);
+                    editor.commit();
 
+                } else {
+                    Toast.makeText(getApplicationContext(), "Wylaczono tryb nocny", Toast.LENGTH_LONG).show();
+                    SharedPreferences prefs = getSharedPreferences("database", Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putInt("night", 1);
+                    editor.commit();
+
+                }
+            }
+        });
+    }
+}
+\end{lstlisting}
+Plik MapsActivity.java
+\begin{lstlisting}[style=java]
+public void deepChangeTextColor(ViewGroup parentLayout){
+        for (int count=0; count < parentLayout.getChildCount(); count++){
+            View view = parentLayout.getChildAt(count);
+            if(view instanceof TextView){
+                ((TextView)view).setTextColor(Color.parseColor("#dddddd"));
+            } else if(view instanceof ViewGroup){
+                deepChangeTextColor((ViewGroup)view);
+            }
+        }
+    }
+    private void setSelectedStyle() {
+
+        MapStyleOptions style;
+        if (night == 2) {
+            style = MapStyleOptions.loadRawResourceStyle ( this, R.raw.night_style );
+            LinearLayout root = findViewById(R.id.main);
+            root.setBackgroundColor(Color.parseColor("#222222"));
+            deepChangeTextColor ( root );
+        } else {
+            style = null;
+        }
+        mGoogleMap.setMapStyle(style);
+    }
+\end{lstlisting}
+Plik night\verb|_|style.json
+\begin{lstlisting}[style=json]
+[
+  {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#242f3e"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#2f6031"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#242f3e"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.locality",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#76c772"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#76c772"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#263c3f"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#6b9a76"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#38414e"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#212a37"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9ca5b3"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#005050"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#1f2835"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#f3d19c"
+      }
+    ]
+  },
+  {
+    "featureType": "transit",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "transit",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#2f3948"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#d59563"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#17263c"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#515c6d"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#17263c"
+      }
+    ]
+  }
+]
+\end{lstlisting}
 
 \subsection{Sprint Review/Demo}
 <<Sprawozdanie z przeglądu Sprint'u -- czy założony cel (przyrost) został osiągnięty oraz czy wszystkie zaplanowane Backlog Item'y zostały zrealizowane? Demostracja przyrostu produktu>>.

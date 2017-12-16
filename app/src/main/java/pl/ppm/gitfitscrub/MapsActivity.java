@@ -22,6 +22,9 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.SharedPreferences;
+import android.widget.LinearLayout;
+import android.view.ViewGroup;
 
 import com.google.android.gms.maps.model.*;
 import com.google.android.gms.common.ConnectionResult;
@@ -58,6 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button mStartButton;
     static TextView distanceText, speedText;
     boolean StartB = false;
+    int night = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mChronometer.start();
             }
         });
+
+        SharedPreferences prefs = getSharedPreferences("database", MODE_PRIVATE);
+        night = prefs.getInt("night", 1);
+
     }
 
     @Override
@@ -113,6 +121,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     {
         mGoogleMap=googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        setSelectedStyle();
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) { buildAlertMessageNoGps();}
@@ -193,14 +202,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void updateUI() {
         distance = distance + (lStart.distanceTo(lEnd) / 1000.00);
-        if (speed > 0.0)
-            speedText.setText(new DecimalFormat("#.##").format(speed) + " km/h");
-        else
-            speedText.setText("-.--");
-        if (distance > 0.0)
-            distanceText.setText(new DecimalFormat("#.###").format(distance) + " km");
-        else
-            speedText.setText("0 km");
+        if (speed > 0.0) {
+            speedText.setText ( new DecimalFormat ( "#.##" ).format ( speed ) + " km/h" );
+        } else {
+            speedText.setText("0 km/h");
+        }
+
+        if (distance > 0.0) {
+            distanceText.setText ( new DecimalFormat ( "#.###" ).format ( distance ) + " km" );
+        }
+        else {
+            distanceText.setText ( "0 km" );
+        }
 
         lStart = lEnd;
     }
@@ -260,5 +273,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return;
             }
         }
+    }
+    public void deepChangeTextColor(ViewGroup parentLayout){
+        for (int count=0; count < parentLayout.getChildCount(); count++){
+            View view = parentLayout.getChildAt(count);
+            if(view instanceof TextView){
+                ((TextView)view).setTextColor(Color.parseColor("#dddddd"));
+            } else if(view instanceof ViewGroup){
+                deepChangeTextColor((ViewGroup)view);
+            }
+        }
+    }
+    private void setSelectedStyle() {
+
+        MapStyleOptions style;
+        if (night == 2) {
+            style = MapStyleOptions.loadRawResourceStyle ( this, R.raw.night_style );
+            LinearLayout root = findViewById(R.id.main);
+            root.setBackgroundColor(Color.parseColor("#222222"));
+            deepChangeTextColor ( root );
+        } else {
+            style = null;
+        }
+        mGoogleMap.setMapStyle(style);
     }
 }

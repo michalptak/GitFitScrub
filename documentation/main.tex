@@ -13,6 +13,8 @@
 {basicstyle=\ttfamily\supertiny,language=java,tabsize=4,showspaces=false,showstringspaces=false,xleftmargin=0cm,basicstyle=\ttfamily,columns=fullflexible,keepspaces=true,frame=none,breaklines=true}
 \lstdefinestyle{xml}
 {basicstyle=\ttfamily\supertiny,language=xml,tabsize=4,showspaces=false,showstringspaces=false,xleftmargin=0cm,basicstyle=\ttfamily,columns=fullflexible,keepspaces=true,frame=none,breaklines=true}
+\usepackage{hyperref} % linki w spisie treści
+
 
 \title{\bf{Aplikacja mobilna dla biegacza - GitFitScrub}}
 \author{{\em Michał Ptak, Katarzyna Poręba, Jan Michalik}}
@@ -104,10 +106,10 @@ Jako użytkownik zalogowany, chcę mieć możliwość wylogowania się, aby móc
 Jako użytkownik zalogowany, chcę mieć możliwość ustawienia swojego pseudonimu, aby wiedzieć czy jestem zalogowany na swoim koncie.
 
 \subsection{User story 13 (opcjonalne)}
-Jako użytkownik zalogowany, chcę aby statystyki z odbytych treningów zostały zapisane w historii, celem ich późniejszej analizy.
+Jako użytkownik, chcę aby statystyki z odbytych treningów zostały zapisane w historii, celem ich późniejszej analizy.
 
 \subsection{User story 14 (opcjonalne)}
-Jako użytkownik zalogowany, chcę widzieć w statystykach spalone kalorie, by móc dostosować swoją dietę.
+Jako użytkownik, chcę widzieć w statystykach spalone kalorie, by móc dostosować swoją dietę.
 
 \subsection{User story 15 (opcjonalne)}
 Jako użytkownik zalogowany, chcę mieć możliwość usunięcia (całej lub części) historii treningów, aby rozpocząć nowy cykl treningowy.
@@ -261,7 +263,7 @@ Jako użytkownik, chcę mieć możliwość ustawienia powiadomień po określony
 
 \subsection{Backlog Item 11}
 \paragraph{Tytuł zadania.} Stworzenie przycisku "Zakończ trening" oraz nadanie mu funkcjonalności.
-\paragraph{Opis zadania.} Utworzenie nowej aktywności wywołującej metodę odpowiadającej za zakończenie pomiarów i rysowanie polilinii na mapie, a także otwierającej panel z podsumowaniem treningu --- wszystkich wyznaczonych statystyk.
+\paragraph{Opis zadania.} Utworzenie nowej aktywności wywołującej metodę odpowiadającej za zakończenie pomiarów i rysowanie polilinii na mapie, a także otwierającej panel z podsumowaniem treningu --- wszystkich wyznaczonych statystyk. Wciśnięcie przycisku będzie powodować również zapis statystyk w pamięci aplikacji.
 \paragraph{Priorytet.} 9.
 \paragraph{Definition of Done.} Po naciśnięciu "Zakończ trening" aplikacja zatrzymuje pomiary i wyświetla podsumowanie treningu.
 
@@ -327,9 +329,9 @@ Jako użytkownik, chcę mieć możliwość ustawienia powiadomień po określony
 
 \subsection{Backlog Item 22 (opcjonalne)}
 \paragraph{Tytuł zadania.} Prezentowanie danych w historii.
-\paragraph{Opis zadania.} Stworzenie nowej aktywności pobierającej dane z bazy oraz prezentującej je użytkownikowi w tabeli, w panelu Historia, dostępnego z menu głównego.
+\paragraph{Opis zadania.} Stworzenie nowej aktywności prezentującej użytkownikowi statystyki w panelu Historia, dostępnego z menu głównego.
 \paragraph{Priorytet.} 5.
-\paragraph{Definition of Done.} Dane są poprawnie gromadzone w bazie danych.
+\paragraph{Definition of Done.} Dane są poprawnie wyświetlane.
 
 \subsection{Backlog Item 23 (opcjonalne)}
 \paragraph{Tytuł zadania.} Usuwanie danych z historii.
@@ -366,9 +368,8 @@ Jako użytkownik, chcę mieć możliwość ustawienia powiadomień po określony
 \paragraph{Opis zadania.} Dodanie metody odtwarzającej alert dźwiękowy po przebiegnięciu określonego czasu/dystansu. Dodanie do panelu ustawień pozycji powiadomienia, w której będzie można wybrać plik dźwiękowy oraz kryterium(czas/dystans) wywołania tejże metody.
 \paragraph{Priorytet.} 3.
 \paragraph{Definition of Done.} Po przebiegnięciu określonego czasu/dystansu użytkownik usłyszy alert dźwiękowy.
-%\subsection*{<<Tutaj dodawać kolejne zadania>>}
 
-\section{Sprint 1}
+\section{{Sprint 1}}
 \subsection{Cel} Utworzenie wersji bazowej aplikacji zawierającej ekran menu głównego i przycisk Rozpocznij wyświetlający mapę Google i aktualną pozycję użytkownika.
 \subsection{Sprint Planning/Backlog}
 
@@ -1342,9 +1343,63 @@ Plik night\verb|_|style.json
 \end{lstlisting}
 
 \subsection{Sprint Review/Demo}
-<<Sprawozdanie z przeglądu Sprint'u -- czy założony cel (przyrost) został osiągnięty oraz czy wszystkie zaplanowane Backlog Item'y zostały zrealizowane? Demostracja przyrostu produktu>>.
-
+\par Założony cel został osiągnięty, a czas wykonania zadania był zgodny z estymatą. Stan ustawień trybu nocnego jest przechowywany w pamięci telefonu, nawet po wyłączeniu aplikacji. Dodatkowo usprawniona została praca modułu GPS - działa płynniej oraz przy zablokowanym ekranie.
+\par Demonstracja przyrostu produktu:
+    \begin{figure}[H]
+	\centering
+    \includegraphics[height=0.6\textwidth]{img/settings2.jpg}
+	\includegraphics[height=0.6\textwidth]{img/nightmode.png}\\
+	{Aktywność "Ustawienia" (po lewej) z opcją trybu nocnego aktywowanego przełącznikiem oraz aktywność mapy z narysowaną polilinią w trybie nocnym.}
+    \end{figure}
 \section{Sprint 5}
+
+\subsection{Cel} Utworzenie przycisku zakańczającego trening, po wciśnięciu którego wyświetlone zostaną statystyki z aktualnego treningu oraz zapisane w historii.
+
+\subsection{Sprint Planning/Backlog}
+
+\paragraph{Tytuł zadania.} Stworzenie przycisku "Zakończ trening" oraz nadanie mu funkcjonalności.
+\begin{itemize}
+\item Estymata: XXL
+\end{itemize}
+
+\paragraph{Tytuł zadania.} Stworzenie przycisku "Historia" w menu głównym oraz nadanie mu funkcjonalności.
+\begin{itemize}
+\item Estymata: S
+\end{itemize}
+
+\paragraph{Tytuł zadania.} Prezentowanie danych w historii.
+\begin{itemize}
+\item Estymata: XL
+\end{itemize}
+
+\subsection{Realizacja}
+
+\paragraph{Tytuł zadania.} Stworzenie przycisku "Zakończ trening" oraz nadanie mu funkcjonalności.
+\subparagraph{Wykonawca.} Jan Michalik, Katarzyna Poręba, Michał Ptak.
+\subparagraph{Realizacja.} <<Sprawozdanie z realizacji zadania (w tym ocena zgodności z estymatą). Kod programu (środowisko \texttt{verbatim}): \begin{verbatim}
+for (i=1; i<10; i++)
+...
+\end{verbatim}>>.
+
+\paragraph{Tytuł zadania.} Stworzenie przycisku "Historia" w menu głównym oraz nadanie mu funkcjonalności.
+\subparagraph{Wykonawca.} <<Wykonawca>>.
+\subparagraph{Realizacja.} <<Sprawozdanie z realizacji zadania (w tym ocena zgodności z estymatą). Kod programu (środowisko \texttt{verbatim}): \begin{verbatim}
+for (i=1; i<10; i++)
+...
+\end{verbatim}>>.
+
+\paragraph{Tytuł zadania.} Prezentowanie danych w historii.
+\subparagraph{Wykonawca.} <<Wykonawca>>.
+\subparagraph{Realizacja.} <<Sprawozdanie z realizacji zadania (w tym ocena zgodności z estymatą). Kod programu (środowisko \texttt{verbatim}): \begin{verbatim}
+for (i=1; i<10; i++)
+...
+\end{verbatim}>>.
+
+\subsection{Sprint Review/Demo}
+<<Sprawozdanie z przeglądu Sprint'u -- czy założony cel (przyrost) został osiągnięty oraz czy wszystkie zaplanowane Backlog Item'y zostały zrealizowane? Demostracja przyrostu produktu>>.
+\section*{<<Tutaj dodawać kolejne Sprint'y>>}
+
+\section{Sprint 6}
 
 \subsection{Cel} <<Określić, w jakim celu tworzony jest przyrost produktu>>.
 
@@ -1384,7 +1439,6 @@ for (i=1; i<10; i++)
 \subsection{Sprint Review/Demo}
 <<Sprawozdanie z przeglądu Sprint'u -- czy założony cel (przyrost) został osiągnięty oraz czy wszystkie zaplanowane Backlog Item'y zostały zrealizowane? Demostracja przyrostu produktu>>.
 \section*{<<Tutaj dodawać kolejne Sprint'y>>}
-
 
 \begin{thebibliography}{9}
 

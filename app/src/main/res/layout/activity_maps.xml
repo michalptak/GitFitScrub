@@ -118,8 +118,23 @@
             android:layout_weight="1" />
 
         <Button
+            android:id="@+id/stop_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:visibility="gone"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:padding="5dp"
+            android:text="stop"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <Button
             android:id="@+id/start_button"
             style="@style/Widget.AppCompat.Button.Colored"
+            android:visibility="visible"
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:layout_weight="1"
@@ -129,6 +144,7 @@
             android:textColor="#ffffff"
             android:textSize="20dp"
             android:textStyle="bold" />
+
 
         <Space
             android:layout_width="wrap_content"

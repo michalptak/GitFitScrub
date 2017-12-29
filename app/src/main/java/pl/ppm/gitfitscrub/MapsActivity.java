@@ -59,6 +59,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     FusedLocationProviderClient mFusedLocationClient;
     private Chronometer mChronometer;
     private Button mStartButton;
+    private Button mStopButton;
     static TextView distanceText, speedText;
     boolean StartB = false;
     int night = 1;
@@ -74,6 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFrag.getMapAsync(this);
 
         mStartButton = (Button) findViewById(R.id.start_button);
+        mStopButton = (Button) findViewById (R.id.stop_button);
         mChronometer = (Chronometer) findViewById(R.id.chronometer);
 
         distanceText = (TextView) findViewById(R.id.distanceText);
@@ -83,6 +85,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 StartB = true;
+                mStartButton.setVisibility(View.GONE);
+                mStopButton.setVisibility(View.VISIBLE);
+                mStopButton.setBackgroundColor ( Color.parseColor("#800000") );
                 mChronometer.setBase(SystemClock.elapsedRealtime());
                 mChronometer.start();
             }

@@ -63,6 +63,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     static TextView distanceText, speedText;
     boolean StartB = false;
     int night = 1;
+    long sec;
+    int min;
+    double maxspeed = 0.0;
+    double averagespeed = 0.0;
+    int numberspeed = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +86,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         distanceText = (TextView) findViewById(R.id.distanceText);
         speedText = (TextView) findViewById(R.id.speedText);
 
+
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,6 +98,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mChronometer.start();
             }
         });
+        mStopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StartB = false;
+                mStopButton.setBackgroundColor ( Color.parseColor("#800000") );
+                averagespeed = averagespeed/(double)numberspeed;
+
+                mChronometer.stop();
+                showElapsedTime();
+                buildAlertPodsumowanie();
+            }
+        });
+
 
         SharedPreferences prefs = getSharedPreferences("database", MODE_PRIVATE);
         night = prefs.getInt("night", 1);
@@ -117,6 +136,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         dialog.cancel();
                     }
                 });
+        final android.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void showElapsedTime() {
+        sec = SystemClock.elapsedRealtime() - mChronometer.getBase();
+        min = 0;
+        sec = sec/1000;
+        if ( sec > 60 ) {
+            min = (int)sec/60;
+            sec = sec-min*60;
+        }
+
+    }
+
+    private void buildAlertPodsumowanie() {
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+
+        builder .setTitle("Podsumowanie treningu")
+                .setMessage("dystans: " + new DecimalFormat ( "#.###" ).format ( distance ) + " km"
+                        + "\n" + "czas: " + String.format("%02d", min) + ":"
+                        + String.format("%02d", sec) + " min" + "\n"
+                        + "maksymalna prędkość: " + maxspeed + " km/h" + "\n" + "średnia prędkość: " + averagespeed + " km/h")
+                .setCancelable(false)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        distance = 0.0;
+                        maxspeed = 0.0;
+                        averagespeed = 0.0;
+                        numberspeed = 0;
+                        Intent intent = new Intent(getApplicationContext(), MainMenu.class);
+                        startActivity(intent);
+                    }
+                });
+
         final android.app.AlertDialog alert = builder.create();
         alert.show();
     }
@@ -198,6 +252,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             .color(Color.GREEN));
 
                     speed = location.getSpeed() * 3.6;
+                    if(maxspeed < speed) maxspeed = speed;
+                    averagespeed = averagespeed + speed;
+                    numberspeed = numberspeed + 1;
 
                     updateUI();
                 }

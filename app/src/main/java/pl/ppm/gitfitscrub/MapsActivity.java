@@ -158,7 +158,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .setMessage("dystans: " + new DecimalFormat ( "#.###" ).format ( distance ) + " km"
                         + "\n" + "czas: " + String.format("%02d", min) + ":"
                         + String.format("%02d", sec) + " min" + "\n"
-                        + "maksymalna prędkość: " + maxspeed + " km/h" + "\n" + "średnia prędkość: " + averagespeed + " km/h")
+                        + "maksymalna prędkość: " + new DecimalFormat ( "#.##" ).format (maxspeed) + " km/h"
+                        + "\n" + "średnia prędkość: " + new DecimalFormat ( "#.##" ).format (averagespeed) + " km/h")
                 .setCancelable(false)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {

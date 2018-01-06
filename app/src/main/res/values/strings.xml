@@ -2,4 +2,6 @@
     <string name="app_name">GitFitScrub</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_history">HistoryActivity</string>
+    <string name="historia">Historia</string>
 </resources>

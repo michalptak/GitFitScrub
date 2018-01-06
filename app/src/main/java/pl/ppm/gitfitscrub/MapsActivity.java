@@ -86,7 +86,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         distanceText = (TextView) findViewById(R.id.distanceText);
         speedText = (TextView) findViewById(R.id.speedText);
 
-
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,6 +115,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         night = prefs.getInt("night", 1);
 
     }
+
 
     @Override
     protected void onPause() {
@@ -148,7 +148,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             min = (int)sec/60;
             sec = sec-min*60;
         }
-
     }
 
     private void buildAlertPodsumowanie() {
@@ -222,7 +221,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
         }
     }
-
 
     LocationCallback mLocationCallback = new LocationCallback(){
         @Override
@@ -337,6 +335,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
+
     public void deepChangeTextColor(ViewGroup parentLayout){
         for (int count=0; count < parentLayout.getChildCount(); count++){
             View view = parentLayout.getChildAt(count);
@@ -347,6 +346,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
+    
     private void setSelectedStyle() {
 
         MapStyleOptions style;

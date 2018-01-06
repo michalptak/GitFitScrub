@@ -33,6 +33,7 @@
         android:layout_below="@+id/button2"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
+        android:onClick="runHistory"
         android:text="Historia"
         android:textSize="24sp" />
 

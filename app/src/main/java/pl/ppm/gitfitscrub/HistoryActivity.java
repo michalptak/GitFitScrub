@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,24 +13,22 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class HistoryActivity extends Activity {
     private ArrayList<ItemTemplate> mExampleList;
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private HistoryAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private static final DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-
-    private Button buttonInsert;
-    private Button buttonRemove;
-    private EditText editTextInsert;
-    private EditText editTextRemove;
 
     Date date = new Date();
     @Override
@@ -39,7 +38,16 @@ public class HistoryActivity extends Activity {
 
         loadData();
         buildRecyclerView();
-        buildHistoryButtons();
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String data = getIntent().getStringExtra("data");
+            List<String> dataList = Arrays.asList(data.split("\\s+"));
+            mExampleList.add(0, new ItemTemplate(R.drawable.ic_run, R.drawable.ic_delete,
+                    sdf.format(date), dataList.get(0), dataList.get(1), dataList.get(2),
+                    dataList.get(3)));
+            saveData();
+        }
     }
 
     private void saveData() {
@@ -63,12 +71,6 @@ public class HistoryActivity extends Activity {
         }
     }
 
-    public void insertItem(int position) {
-        mExampleList.add(position, new ItemTemplate(R.drawable.ic_run, sdf.format(date),"stats"));
-        mAdapter.notifyItemInserted(position);
-        saveData();
-    }
-
     public void removeItem(int position) {
         mExampleList.remove(position);
         mAdapter.notifyItemRemoved(position);
@@ -83,26 +85,10 @@ public class HistoryActivity extends Activity {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-    }
 
-    private void buildHistoryButtons() {
-        buttonInsert = findViewById(R.id.button_insert);
-        buttonRemove = findViewById(R.id.button_remove);
-        editTextInsert = findViewById(R.id.edittext_insert);
-        editTextRemove = findViewById(R.id.edittext_remove);
-
-        buttonInsert.setOnClickListener(new View.OnClickListener() {
+        mAdapter.setOnItemClickListener(new HistoryAdapter.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                int position = Integer.parseInt(editTextInsert.getText().toString());
-                insertItem(position);
-            }
-        });
-
-        buttonRemove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int position = Integer.parseInt(editTextRemove.getText().toString());
+            public void onDeleteClick(int position) {
                 removeItem(position);
             }
         });

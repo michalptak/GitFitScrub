@@ -1,6 +1,7 @@
 package pl.ppm.gitfitscrub;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -43,7 +44,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -68,6 +73,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     double maxspeed = 0.0;
     double averagespeed = 0.0;
     int numberspeed = 0;
+    private LinearLayout panel;
+    private LinearLayout jasiek;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +90,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mStartButton = (Button) findViewById(R.id.start_button);
         mStopButton = (Button) findViewById (R.id.stop_button);
         mChronometer = (Chronometer) findViewById(R.id.chronometer);
+
 
         distanceText = (TextView) findViewById(R.id.distanceText);
         speedText = (TextView) findViewById(R.id.speedText);
@@ -101,12 +110,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 StartB = false;
+                mStopButton.setVisibility(View.GONE);
                 mStopButton.setBackgroundColor ( Color.parseColor("#800000") );
                 averagespeed = averagespeed/(double)numberspeed;
-
+                panel = findViewById(R.id.panel);
+                panel.setVisibility(view.GONE);
                 mChronometer.stop();
                 showElapsedTime();
                 buildAlertPodsumowanie();
+                jasiek = findViewById(R.id.jasiek);
+                jasiek.getLayoutParams().height =  ViewGroup.LayoutParams.MATCH_PARENT;
             }
         });
 
@@ -114,6 +127,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SharedPreferences prefs = getSharedPreferences("database", MODE_PRIVATE);
         night = prefs.getInt("night", 1);
 
+    }
+
+
+    public String summaryValues() {
+        @SuppressLint("DefaultLocale") String fDist = String.format("%.3f", distance);
+        @SuppressLint("DefaultLocale") String fTime = String.format("%s:%s",
+                String.format("%02d", min), String.format("%02d", sec));
+        @SuppressLint("DefaultLocale") String fMaxSpeed = String.format("%.2f", maxspeed);
+        @SuppressLint("DefaultLocale") String fAvgSpeed = String.format("%.2f", averagespeed);
+
+        String summaryData;
+        summaryData = fTime + " " + fDist + " " + fAvgSpeed + " " + fMaxSpeed;
+
+        return summaryData;
     }
 
 
@@ -162,11 +189,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .setCancelable(false)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        String stats = summaryValues();
                         distance = 0.0;
                         maxspeed = 0.0;
                         averagespeed = 0.0;
                         numberspeed = 0;
-                        Intent intent = new Intent(getApplicationContext(), MainMenu.class);
+                        Intent intent = new Intent(getApplicationContext(), HistoryActivity.class);
+                        intent.putExtra("data", stats);
                         startActivity(intent);
                     }
                 });
@@ -346,7 +375,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
-    
+
     private void setSelectedStyle() {
 
         MapStyleOptions style;

@@ -1373,22 +1373,31 @@ Plik night\verb|_|style.json
 
 \paragraph{Tytuł zadania.} Stworzenie przycisku "Zakończ trening" oraz nadanie mu funkcjonalności.
 \subparagraph{Wykonawca.} Jan Michalik, Katarzyna Poręba.
-\subparagraph{Realizacja.} Stworzenie przycisku "Stop" kończącego pomiary i rysowanie polilinii oraz wyświetlającego statystyki treningu. Po zamknięciu podsumowania treningu użytkownik przenoszony jest do historii.
-Plik MapsAcivity.java:
+\subparagraph{Realizacja.} Stworzenie przycisku "Stop" kończącego pomiary i rysowanie polilinii oraz wyświetlającego statystyki treningu. Po zamknięciu podsumowania treningu użytkownik przenoszony jest do historii.\\
+Plik MapsActivity.java:
 \begin{lstlisting}[style=java]
 private Button mStopButton;
      static TextView distanceText, speedText;
      boolean StartB = false;
      int night = 1;
+    long sec;
+    int min;
+    double maxspeed = 0.0;
+    double averagespeed = 0.0;
+    int numberspeed = 0;
+
+   @Override
     protected void onCreate(Bundle savedInstanceState) {
          mapFrag.getMapAsync(this);
  
          mStartButton = (Button) findViewById(R.id.start_button);
          mStopButton = (Button) findViewById (R.id.stop_button);
          mChronometer = (Chronometer) findViewById(R.id.chronometer);
- 
+
          distanceText = (TextView) findViewById(R.id.distanceText);
-    protected void onCreate(Bundle savedInstanceState) {
+         speedText = (TextView) findViewById(R.id.speedText);
+
+   	mStartButton.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
                  StartB = true;
@@ -1398,57 +1407,9 @@ private Button mStopButton;
                  mChronometer.setBase(SystemClock.elapsedRealtime());
                  mChronometer.start();
              }
-\end{lstlisting}
-Plik activity\verb|_|maps.xml:
-\begin{lstlisting}[style=xml]
-        <Button
-            android:id="@+id/stop_button"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:visibility="gone"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:background="@color/colorAccent"
-            android:padding="5dp"
-            android:text="stop"
-            android:textColor="#ffffff"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+	});
 
-        <Button
-             android:id="@+id/start_button"
-             style="@style/Widget.AppCompat.Button.Colored"
-            android:visibility="visible"
-             android:layout_width="80dp"
-             android:layout_height="40dp"
-             android:layout_weight="1"
-             
-             android:textSize="20dp"
-             android:textStyle="bold" />
-\end{lstlisting}
-Plik MapsAcivity.java:
-\begin{lstlisting}[style=java]
-long sec;
-    int min;
-    double maxspeed = 0.0;
-    double averagespeed = 0.0;
-    int numberspeed = 0;
- 
-     @Override
-     protected void onCreate(Bundle savedInstanceState) {
-     protected void onCreate(Bundle savedInstanceState) {
-         distanceText = (TextView) findViewById(R.id.distanceText);
-         speedText = (TextView) findViewById(R.id.speedText);
- 
-
-         mStartButton.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-     public void onClick(View view) {
-                 mChronometer.start();
-             }
-         });
-        mStopButton.setOnClickListener(new View.OnClickListener() {
+	 mStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 StartB = false;
@@ -1459,9 +1420,9 @@ long sec;
                 showElapsedTime();
                 buildAlertPodsumowanie();
             }
-        });
+	});
+        }
 
- 
          SharedPreferences prefs = getSharedPreferences("database", MODE_PRIVATE);
          night = prefs.getInt("night", 1);
      public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") fi
@@ -1473,8 +1434,8 @@ long sec;
         min = 0;
         sec = sec/1000;
         if ( sec > 60 ) {
-            min = (int)sec/60;
-            sec = sec-min*60;
+        min = (int)sec/60;
+        sec = sec-min*60;
         }
 
     }
@@ -1515,12 +1476,38 @@ long sec;
                     averagespeed = averagespeed + speed;
                     numberspeed = numberspeed + 1;
 \end{lstlisting}
+Plik activity\verb|_|maps.xml:
+\begin{lstlisting}[style=xml]
+        <Button
+            android:id="@+id/stop_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:visibility="gone"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:padding="5dp"
+            android:text="stop"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:textStyle="bold" />
 
-
+        <Button
+             android:id="@+id/start_button"
+             style="@style/Widget.AppCompat.Button.Colored"
+            android:visibility="visible"
+             android:layout_width="80dp"
+             android:layout_height="40dp"
+             android:layout_weight="1"
+             
+             android:textSize="20dp"
+             android:textStyle="bold" />
+\end{lstlisting}
+ 
 \paragraph{Tytuł zadania.} Stworzenie przycisku "Historia" w menu głównym oraz nadanie mu funkcjonalności.
 \subparagraph{Wykonawca.} Jan Michalik, Michał Ptak.
-\subparagraph{Realizacja.} Stworzenie przycisku, który przenosi użytkownika do panelu historia.
-Plik activity\verb|_|main\verb|_|manu.xml:
+\subparagraph{Realizacja.} Stworzenie przycisku, który przenosi użytkownika do panelu historia.\\
+Plik activity\verb|_|main\verb|_|menu.xml:
 \begin{lstlisting}[style=xml]
 <Button
         android:id="@+id/button3"
@@ -1545,7 +1532,7 @@ Plik MainMenu.java:
 
 \paragraph{Tytuł zadania.} Prezentowanie danych w historii.
 \subparagraph{Wykonawca.} Michał Ptak
-\subparagraph{Realizacja.} Utworzenie szablonu bloku prezentującego statystyki. Stworzenie widoku RecyclerView oraz CardView i powiązanie ich z adapterem odpowiedzialnym za dostarczenie szablonu do widoku. Wykonanie funkcji pozwalającej na przechowywanie statystyk po zmianie aktywności lub wyłączeniu aplikacji. Zrealizowanie funkcjonalności pozwalającej na usunięcie wybranych pozycji z historii.
+\subparagraph{Realizacja.} Utworzenie szablonu bloku prezentującego statystyki. Stworzenie widoku RecyclerView oraz CardView i powiązanie ich z adapterem odpowiedzialnym za dostarczenie szablonu do widoku. Wykonanie funkcji pozwalającej na przechowywanie statystyk po zmianie aktywności lub wyłączeniu aplikacji. Zrealizowanie funkcjonalności pozwalającej na usunięcie wybranych pozycji z historii.\\
 Plik build.gradle:
 \begin{lstlisting}[style=java]
     implementation 'com.android.support:recyclerview-v7:26.1.0'
@@ -1894,9 +1881,6 @@ Plik example\verb|_|item.xml:
             android:textSize="15sp"
             android:layout_marginStart="8dp"/>
 
-
-
-
     </RelativeLayout>
 
 </android.support.v7.widget.CardView> 
@@ -1928,15 +1912,173 @@ Plik example\verb|_|item.xml:
 
 \paragraph{Tytuł zadania.} Prezentowanie danych w historii.
 \subparagraph{Wykonawca.} Jan Michalik, Katarzyna Poręba, Michał Ptak.
-\subparagraph{Realizacja.} <<Sprawozdanie z realizacji zadania (w tym ocena zgodności z estymatą). Kod programu (środowisko \texttt{verbatim}): \begin{verbatim}
-for (i=1; i<10; i++)
-...
-\end{verbatim}>>.
+\subparagraph{Realizacja.} Przekazanie wartości: dystans, prędkość, prędkość maksymalna zostało zrealizowane przy użyciu struktury \emph{Intent}. Ponadto usprawnione zostało selektywne usuwanie kart ze statystykami z historii, teraz wystarczy nacisnąć ikonę kosza w prawej części karty by ją usunąć. Po powrocie z aktywności historia do aktywności mapy panel statystyk zostaje ukryty, a mapa rozszerzona na cały ekran, co pozwala na lepszą analizę trasy treningu.\\
+Plik MapsActivity.java:
+\begin{lstlisting}[style=java]
+    private LinearLayout panel;
+    private LinearLayout jasiek;
 
+  @Override
+    protected void onCreate(Bundle savedInstanceState) {
+       (...)
+	mStopButton.setOnClickListener(new View.OnClickListener() {
+	(...)
+	     panel = findViewById(R.id.panel);
+                panel.setVisibility(view.GONE);
+	    (...)
+	     jasiek = findViewById(R.id.jasiek);
+                jasiek.getLayoutParams().height =  ViewGroup.LayoutParams.MATCH_PARENT;
+	}
+
+    public String summaryValues() {
+        @SuppressLint("DefaultLocale") String fDist = String.format("%.3f", distance);
+        @SuppressLint("DefaultLocale") String fTime = String.format("%s:%s",
+                String.format("%02d", min), String.format("%02d", sec));
+        @SuppressLint("DefaultLocale") String fMaxSpeed = String.format("%.2f", maxspeed);
+        @SuppressLint("DefaultLocale") String fAvgSpeed = String.format("%.2f", averagespeed);
+
+        String summaryData;
+        summaryData = fTime + " " + fDist + " " + fAvgSpeed + " " + fMaxSpeed;
+
+        return summaryData;
+    }
+
+    private void buildAlertPodsumowanie() {
+	(...)
+	public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                       String stats = summaryValues();
+		(...)
+		Intent intent = new Intent(getApplicationContext(), HistoryActivity.class);
+                      intent.putExtra("data", stats);
+                      startActivity(intent);
+	}
+\end{lstlisting}
+
+Plik HistoryActivity.java:
+\begin{lstlisting}[style=java]
+    private HistoryAdapter mAdapter;
+
+    protected void onCreate(Bundle savedInstanceState) {
+	(...)
+	
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String data = getIntent().getStringExtra("data");
+            List<String> dataList = Arrays.asList(data.split("\\s+"));
+            mExampleList.add(0, new ItemTemplate(R.drawable.ic_run, R.drawable.ic_delete,
+                    sdf.format(date), dataList.get(0), dataList.get(1), dataList.get(2),
+                    dataList.get(3)));
+            saveData();
+        }
+    }
+
+    public void buildRecyclerView() {
+	mAdapter.setOnItemClickListener(new HistoryAdapter.OnItemClickListener() {
+            @Override
+            public void onDeleteClick(int position) {
+                removeItem(position);
+    }
+\end{lstlisting}
+
+Plik HistoryAdapter.java:
+\begin{lstlisting}[style=java]
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onDeleteClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
+
+public static class HistoryViewHolder extends RecyclerView.ViewHolder {
+        public ImageView mImageViewDelete;
+	(...)
+	public HistoryViewHolder(View itemView, final OnItemClickListener listener) {
+		(...)
+           	 mImageViewDelete = itemView.findViewById(R.id.imageViewDelete);
+		(...)
+		   mImageViewDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onDeleteClick(position);
+                        }
+                    }
+                }
+            });
+	}
+         }
+
+	@Override
+    public HistoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	HistoryViewHolder evh = new HistoryViewHolder(v, mListener);
+     return evh;
+    }
+
+	@Override
+   	 public void onBindViewHolder(HistoryViewHolder holder, int position) {
+       	 (...)
+       	 holder.mImageViewDelete.setImageResource(currentItem.getImageResourceDelete());
+        	(...)
+ 	}
+\end{lstlisting}
+
+Plik ItemTemplate.java:
+\begin{lstlisting}[style=java]
+	public class ItemTemplate {
+		private int mImageResourceDelete;
+		(...)
+		
+		public ItemTemplate(int imageResource, int imageResourceDelete, String text1, String text2,
+                       	 String text3, String text4, String text5) {
+       			 mImageResourceDelete = imageResourceDelete;
+			(...)
+		}
+		public int getImageResourceDelete() {
+        			return mImageResourceDelete;
+   		 }
+\end{lstlisting}
+
+Plik \verb!example_item.xml!:
+\begin{lstlisting}[style=xml]
+	 <ImageView
+            android:id="@+id/imageViewDelete"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:padding="2dp"
+            android:src="@drawable/ic_delete"/>
+\end{lstlisting}
+
+Plik \verb!ic_delete.xml!:
+\begin{lstlisting}[style=xml]
+	<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        	android:width="24dp"
+       	 android:height="24dp"
+       	 android:viewportWidth="24.0"
+        	android:viewportHeight="24.0">
+   	 <path
+       	 android:fillColor="#ff0000"
+      	  android:pathData="M6,19c0,1.1 0.9,2 2,2h8c1.1,0 2,-0.9 2,-2V7H6v12zM19,4h-3.5l-1,-1h-5l-1,1H5v2h14V4z"/>
+	</vector>
+\end{lstlisting}
 
 
 \subsection{Sprint Review/Demo}
-<<Sprawozdanie z przeglądu Sprint'u -- czy założony cel (przyrost) został osiągnięty oraz czy wszystkie zaplanowane Backlog Item'y zostały zrealizowane? Demostracja przyrostu produktu>>.
+\par Założony przyrost produktu został osiągnięty, a zaplanowany Backlog Item zrealizowany zgodnie z estymatą czasową. 
+\par Demostracja przyrostu produktu.
+
+    \begin{figure}[H]
+	\centering
+	\includegraphics[height=0.6\textwidth]{img/history2.png}
+	\includegraphics[height=0.6\textwidth]{img/postWorkoutMap.png}\\
+	{Widok ekranu historia oraz mapy po zakończonym treningu. }
+    \end{figure}
 
 \begin{thebibliography}{9}
 

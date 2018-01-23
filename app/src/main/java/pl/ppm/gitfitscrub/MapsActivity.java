@@ -50,6 +50,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.lang.Math.floor;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -72,9 +74,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     int min;
     double maxspeed = 0.0;
     double averagespeed = 0.0;
+    double pace;
+    double pace1;
     int numberspeed = 0;
     private LinearLayout panel;
     private LinearLayout jasiek;
+    int kolor = Color.parseColor("#000080");
 
 
     @Override
@@ -277,9 +282,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
                             .add(new LatLng(lStart.getLatitude(), lStart.getLongitude()), new LatLng(lEnd.getLatitude(), lEnd.getLongitude()))
                             .width(8)
-                            .color(Color.GREEN));
+                            .color(kolor));
 
                     speed = location.getSpeed() * 3.6;
+                    pace = 60/speed;
+                    pace1 = pace;
+                    pace = floor(pace);
+                    pace1 = (pace1-pace)*60;
                     if(maxspeed < speed) maxspeed = speed;
                     averagespeed = averagespeed + speed;
                     numberspeed = numberspeed + 1;
@@ -381,6 +390,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MapStyleOptions style;
         if (night == 2) {
             style = MapStyleOptions.loadRawResourceStyle ( this, R.raw.night_style );
+            kolor = Color.parseColor("#00ff00");
             LinearLayout root = findViewById(R.id.main);
             root.setBackgroundColor(Color.parseColor("#222222"));
             deepChangeTextColor ( root );
